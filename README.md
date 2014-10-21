@@ -5,7 +5,7 @@ EECS393 Fall 2014 Semester Project
 
 <include description of software>
 
-Gabe Ewing
+Gabriel Ewing
 Lucas Evans
 Jingchi Zhang
 Darian Pazgan-Lorenzo
