@@ -24,6 +24,10 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
+
+TEMPLATE_DIRS = [TEMPLATE_PATH]
+
 ALLOWED_HOSTS = []
 
 
