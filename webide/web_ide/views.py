@@ -9,4 +9,4 @@ def admin(request):
     return render(request, 'web_ide/admin.html')
 
 def editor(request):
-    return HttpResponse("editor page")
+    return render(request, 'web_ide/editor.html')
