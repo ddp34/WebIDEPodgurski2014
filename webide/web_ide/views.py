@@ -6,7 +6,7 @@ def login(request):
     return HttpResponse("login page")
 
 def admin(request):
-    return HttpResponse("admin page")
+    return render(request, 'web_ide/admin.html')
 
 def editor(request):
     return HttpResponse("editor page")
