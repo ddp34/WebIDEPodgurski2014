@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Login</title>
-  </head>
-  <body>
+{% extends 'base.html' %}
+
+{% block body_block %}
     <h1>Login Page</h1>
-    <a href="/web_ide/admin">Admin</a><br />
-  </body>
-</html>
+    <a href="{% url 'admin' %}">Admin</a><br />
+{% endblock %}

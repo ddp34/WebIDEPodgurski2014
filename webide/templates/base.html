@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+<link rel="stylesheet" type="text/css" href="{% static 'web_ide/style.css' %}" />
+  <head>
+    <h1 align="center">WebIDE</h1>
+  </head>
+
+  <body class="toplayer">
+    <div class="container">
+    <!-- Page specific content goes here -->
+    {% block body_block %}{% endblock %}
+    </div>
+  </body>
+</html>
