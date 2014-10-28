@@ -43,6 +43,14 @@ INSTALLED_APPS = (
     'web_ide',
 )
 
+# Controls password hashing control.
+# Should implement more secure hasher in future version.
+
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+)
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
