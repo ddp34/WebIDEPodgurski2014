@@ -1,18 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Page(models.Model):
-    title = models.CharField(max_length=128)
-    url = models.URLField()
-
-    def __unicode__(self):
-        return self.title
-
 # This is to implement the Administrator functionality
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
-    isAdmin = models.BooleanField(blank=True)
+    isAdmin = models.BooleanField(blank=False)
 
     def __unicode__(self):
         return self.user.username
