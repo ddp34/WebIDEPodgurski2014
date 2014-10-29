@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 {% block body_block %}    
-    <head>
-        <title>Editor.html</title>
-    </head>
-    
-    <body>
-        <h1>Editor</h1>
-        hello world! <strong>{{ boldmessage }}</strong><br />
-    </body>
+      <div class="editorpane">
+      
+        <div class="leftpane">
+	  File Browser
+	</div>
+
+	<div class="centerpane">
+	  Code Editor
+	</div>
+
+	<div class="rightpane">
+	  Chat
+	</div>
+
+      </div>
 {% endblock %}
