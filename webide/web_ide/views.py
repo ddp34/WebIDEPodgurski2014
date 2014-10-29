@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from web_ide.forms import UserForm
+from web_ide.forms import UserForm, UserProfileForm
 
 def user_login(request):
     if request.method == 'POST':
