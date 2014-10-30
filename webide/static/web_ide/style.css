@@ -32,11 +32,12 @@ body {
 .leftpane, .rightpane {
 	  width: 20%;	
 	  height: 98%;
-	  outline: black dotted thin;	  
+	  outline: black solid thin;	  
 }
 
 .leftpane {
 	  float: left;
+	  background-color: #2CDB9B;
 }
 
 .rightpane {
@@ -47,7 +48,7 @@ body {
 	  width: 58%;
 	  height: 98%;
 	  display: inline-block;
-	  outline: black dotted thin;	  
+	  outline: black solid thin;	  
 }
 
 .filecontentsview {
@@ -60,4 +61,19 @@ body {
 		  overflow: scroll;
 		  border: none;
 		  outline: none;
+}
+
+.chatview {
+	  height: 90%;
+	  margin: 3px;
+	  position: relative;
+}
+
+.entrywindow {
+	     outline: black solid thin;
+	     height: 25%;
+	     width: 100%;
+	     position: absolute;
+	     bottom: 3px;
+	     text-align: left;
 }
