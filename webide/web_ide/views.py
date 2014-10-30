@@ -25,6 +25,7 @@ def user_login(request):
 
     return render(request, 'web_ide/login.html')
 
+@login_required
 def editor(request):
     return render(request, 'web_ide/editor.html')
 
