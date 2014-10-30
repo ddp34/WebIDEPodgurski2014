@@ -30,6 +30,10 @@ TEMPLATE_DIRS = [TEMPLATE_PATH]
 
 ALLOWED_HOSTS = []
 
+# Sets Developer to be the default user model
+
+AUTH_USER_MODEL = 'web_ide.Developer'
+
 
 # Application definition
 
