@@ -22,6 +22,7 @@ class DeveloperManager(BaseUserManager):
     def create_superuser(self, username, email, password):
         administrator = self.create_user(username=username, email=email, password=password)
         administrator.is_superuser = True
+        administrator.is_staff = True
         administrator.save(using=self.db)
         return administrator
 
@@ -31,6 +32,7 @@ class Developer(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(unique=True, max_length=20, validators=[alphanumeric])
     email = models.EmailField(verbose_name='email address', unique=True, max_length=255)
     is_active = models.BooleanField(default=True, null=False)
+    is_staff = models.BooleanField(default=False, null=False)
 
     # Custom user manager instead of the default
     objects = DeveloperManager()
