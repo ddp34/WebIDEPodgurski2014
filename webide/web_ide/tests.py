@@ -1,8 +1,8 @@
 from django.test import TestCase
 from web_ide.models import DeveloperManager
 from web_ide.models import Developer
+from web_ide.models import ProjectFile
 from web_ide.forms import DeveloperForm
-#from web_ide.models import FileSystem
 
 #test regexes for user credentials
 class UserCredentialsTestCase(TestCase):
@@ -18,33 +18,25 @@ class UserCredentialsTestCase(TestCase):
         user_form_too_long = DeveloperForm({'username': "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 'email': "email@abc.com", 'password': "password"})
         self.assertEqual(user_form_too_long.is_valid(), False)
 
-    #TODO: test password/email validation
+    #test email validation
+    def test_email_validation(self):
+        
+        #valid fields
+        user_form_valid = DeveloperForm({'username': "testusername", 'email': "email@abc.com", 'password': "password"})
+        self.assertEqual(user_form_valid.is_valid(), True)
 
-# Django's example:
-'''
-class AnimalTestCase(TestCase):
-    def setUp(self):
-        Animal.objects.create(name="lion", sound="roar")
-        Animal.objects.create(name="cat", sound="meow")
+        #email is invalid
+        user_form_bad_email = DeveloperForm({'username': "testusername", 'email': "bademail", 'password': "password"})
+        self.assertEqual(user_form_bad_email.is_valid(), False)
 
-    def test_animals_can_speak(self):
-        """Animals that can speak are correctly identified"""
-        lion = Animal.objects.get(name="lion")
-        cat = Animal.objects.get(name="cat")
-        self.assertEqual(lion.speak(), 'The lion says "roar"')
-        self.assertEqual(cat.speak(), 'The cat says "meow"')
-'''       
-# Running tests:
-'''
-# Run all the tests in the animals.tests module
-$ ./manage.py test animals.tests
-
-# Run all the tests found within the 'animals' package
-$ ./manage.py test animals
-
-# Run just one test case
-$ ./manage.py test animals.tests.AnimalTestCase
-
-# Run just one test method
-$ ./manage.py test animals.tests.AnimalTestCase.test_animals_can_speak
-'''    
+#tests for model 
+class DeveloperTestCase(TestCase):
+    def test_getter_methods(self):
+        #create developer object
+        user_form_valid = DeveloperForm({'username': "testusername", 'email': "email@abc.com", 'password': "password"})
+        user = user_form_valid.save()
+        user.set_password(user.password)
+        
+        #test the getter methods
+        self.assertEqual(user.get_full_name(), "testusername")
+        self.assertEqual(user.get_short_name(), "testusername")
