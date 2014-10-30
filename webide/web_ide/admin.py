@@ -22,13 +22,19 @@ class CustomDeveloperCreationForm(UserCreationForm):
             return username
         raise forms.ValidationError(self.error_messages['duplicate_username'])
 
-    def check_match(self):
+    def clean_pw2(self):
         pw1 = self.cleaned_data.get("pw1")
         pw2 = self.cleaned_data.get("pw2")
 
         if pw1 and pw2 and pw1 != pw2:
             raise forms.ValidationError("Passwords must match.")
         return pw2
+
+    def clean_pw1(self):
+        password = self.cleaned_data["pw1"]
+
+        if len(password) < 6:
+            raise forms.ValidationError("Password too short")
 
     def save(self, commit=True):
         developer = super(CustomDeveloperCreationForm, self).save(commit=False)
