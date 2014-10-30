@@ -8,12 +8,12 @@
 
     {% else %}
     <strong>Please register:</strong><br />
-    <form id="user_form" method="post" action="/web_ide/register/"
+    <form id="developer_form" method="post" action="/web_ide/register/"
           enctype="multipart/form-data">
 
         {% csrf_token %}
 
-        {{ user_form.as_p }}
+        {{ developer_form.as_p }}
         <input type="submit" name="submit" value="Register" />
     </form>
     {% endif %}
