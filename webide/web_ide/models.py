@@ -11,9 +11,12 @@ class UserProfile(models.Model):
         return self.user.username
 
 #class to represent the filesystem
-class FileSystem(models.Model):
+
+class ProjectFile(models.Model):
     filename = models.CharField(max_length=64)
     contents = models.CharField(max_length=2056)
+    #pointers to contained files, if directory
+    
 
     def getName(self):
         return self.name
