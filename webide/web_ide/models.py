@@ -68,3 +68,14 @@ class ProjectFile(models.Model):
     def isDir(self, path):
         return os.path.isdir(path)
         return self.email
+
+#chat message db entry
+class ChatMessage(models.Model):
+    message = models.CharField()
+    author = models.CharField()
+
+    def getMessage(self):
+        return self.message
+
+    def getAuthor(self):
+        return self.author

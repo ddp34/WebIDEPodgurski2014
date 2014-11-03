@@ -27,6 +27,13 @@ def user_login(request):
 
 @login_required
 def editor(request):
+    
+    #check if the user posted a chat message
+    if request.method == 'POST':
+        #chat_message = ChatMessage()
+        
+        
+
     return render(request, 'web_ide/editor.html')
 
 def register(request):

@@ -76,4 +76,5 @@ body {
 	     position: absolute;
 	     bottom: 3px;
 	     text-align: left;
+	     overflow: scroll;
 }
