@@ -18,9 +18,10 @@ EBNF: token <= identifier | keyword | separator | operator | literal | comment
 
 RegexTable = {
 
-	( '', ''),
-	
-	( '[a-zA-Z_]\w+', 'IDENTIFIER'),
+	# format for copy/pasting ( '', ''),
+
+	# Identifier
+	( '($\w+)|([a-zA-Z]w*)', 'IDENTIFIER'),
 	
 	# Keywords
 	( 'abstract', 'ABSTRACT'),
@@ -38,14 +39,14 @@ RegexTable = {
 	( 'do', 'DO'),
 	( 'double', 'DOUBLE'),
 	( 'else', 'ELSE'),
-	( 'extends', 'EXTENDS),
+	( 'extends', 'EXTENDS'),
 	( 'final', 'FINAL'),
 	( 'finally', 'FINALLY'),
 	( 'float', 'FLOAT'),
 	( 'for', 'FOR'),
 	( 'goto', 'GOTO'),
 	( 'if', 'IF'),
-	( 'implements', 'IMPLEMENTS),
+	( 'implements', 'IMPLEMENTS'),
 	( 'import', 'IMPORTS'),
 	( 'instanceof', 'INSTANCEOF'),
 	( 'int', 'INT'),
@@ -55,7 +56,7 @@ RegexTable = {
 	( 'new', 'NEW'),
 	( 'package', 'PACKAGE'),
 	( 'private', 'PRIVATE'),
-	( 'protected', 'PROTECTED,
+	( 'protected', 'PROTECTED'),
 	( 'public', 'PUBLIC'),
 	( 'return', 'RETURN'),
 	( 'short', 'SHORT'),
@@ -74,10 +75,17 @@ RegexTable = {
 	( 'while', 'WHILE'),
 	
 	# Separators
-	
-	
+    ( r';', 'SEMICOLON'),
+    ( r',', 'COMMA'),
+    ( r'.', 'PERIOD'),
+    ( r'(', 'LEFT-PAREN'),
+    ( r')', 'RIGHT-PAREN'),
+    ( r'{', 'LEFT-BRACE'),
+    ( r'}', 'RIGHT-BRACE'),
+    ( r'[', 'LEFT-BRACKET'),
+	( r']', 'RIGHT-BRACKET'),
+
 	# Operators
-	
 	( '++', 'INCREMENT'),
 	( '--', 'DECREMENT'), 
 	( '~', 'BITWISE_COMPLEMENT'),
@@ -112,24 +120,20 @@ RegexTable = {
 	#	list at https://www.cs.cmu.edu/~pattis/15-1XX/15-200/lectures/tokens/lecture.html
 
 	# Literals
-	
-	
-	
-	# Numeric
-	
-	# Logical
-	
-	# Textual
-	
-	# Reference
+	( '\d+|0[0-7]+|x[0-9a-fA-F]' , 'INT-LITERAL'),
+    # decimal, octal, hexadecimal
+    ( '\d\.\d', 'DOUBLE-LITERAL'),
+    ( 'true|false', 'BOOLEAN-LITERAL'),
+    ( '''[\s\S]?''', 'CHAR-LITERAL'),
+    # a char in java is any single character in single quotes, or '', or ' '
+    ( '''"[\s\S]*"''', 'STRING-LITERAL'), # Figure out how to color embedded string differently
+    ( 'null', 'NULL-LITERAL'),
 	
 	# Comments
-	
-	# Line
-	
-	# Block
-	
+	( r'//[^\n]*\n', 'LINE-COMMENT'), # In a line comment, anything but a new line can be put after // (^\n = negate set: new line)
+    ( r'/*[\s\S]*/', 'BLOCK-COMMENT'),
+
 	# White space
-	
+    ( '\s', "WHITESPACE")
 
 }
