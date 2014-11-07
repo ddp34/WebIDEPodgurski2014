@@ -16,12 +16,12 @@ Block
 EBNF: token <= identifier | keyword | separator | operator | literal | comment
 """
 
-RegexTable = {
+regextable = {
 
 	# format for copy/pasting ( '', ''),
 
 	# Identifier
-	( '($\w+)|([a-zA-Z]w*)', 'IDENTIFIER'),
+	# ( '($\w+)|([a-zA-Z]w*)', 'IDENTIFIER'),
 	
 	# Keywords
 	( 'abstract', 'ABSTRACT'),
@@ -137,3 +137,5 @@ RegexTable = {
     ( '\s', "WHITESPACE")
 
 }
+
+

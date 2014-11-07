@@ -1,0 +1,70 @@
+# Associative array of token types and color names.
+
+colortable = {
+
+    ( 'IDENTIFIER', 'LIGHT-PURPLE'),
+
+    # Keywords
+    ( 'ABSTRACT', 'BLUE'),
+	( 'ASSERT', 'BLUE'),
+	( 'BOOLEAN', 'BLUE'),
+	( 'BREAK', 'BLUE'),
+	( 'BYTE', 'BLUE'),
+	( 'CASE', 'BLUE'),
+	( 'CATCH', 'BLUE'),
+	( 'CHAR', 'BLUE'),
+	( 'CLASS', 'BLUE'),
+	( 'CONST', 'BLUE'),
+	( 'CONTINUE', 'BLUE'),
+	( 'DEFAULT', 'BLUE'),
+	( 'DO', 'BLUE'),
+	( 'DOUBLE', 'BLUE'),
+	( 'ELSE', 'BLUE'),
+	( 'EXTENDS', 'BLUE'),
+	( 'FINAL', 'BLUE'),
+	( 'FINALLY', 'BLUE'),
+	( 'FLOAT', 'BLUE'),
+	( 'FOR', 'BLUE'),
+	( 'GOTO', 'BLUE'),
+	( 'IF', 'BLUE'),
+	( 'IMPLEMENTS', 'BLUE'),
+	( 'IMPORTS', 'BLUE'),
+	( 'INSTANCEOF', 'BLUE'),
+	( 'INT', 'BLUE'),
+	( 'INTERFACE', 'BLUE'),
+	( 'LONG', 'BLUE'),
+	( 'NATIVE', 'BLUE'),
+	( 'NEW', 'BLUE'),
+	( 'PACKAGE', 'BLUE'),
+	( 'PRIVATE', 'BLUE'),
+	( 'PROTECTED', 'BLUE'),
+	( 'PUBLIC', 'BLUE'),
+	( 'RETURN', 'BLUE'),
+	( 'SHORT', 'BLUE'),
+	( 'STATIC', 'BLUE'),
+	( 'STRICTFP', 'BLUE'),
+	( 'SUPER', 'BLUE'),
+	( 'SYNCHRONIZED', 'BLUE'),
+	( 'SWITCH', 'BLUE'),
+	( 'THIS', 'BLUE'),
+	( 'THROW', 'BLUE'),
+	( 'THROWS', 'BLUE'),
+	( 'TRANSIENT', 'BLUE'),
+	( 'TRY', 'BLUE'),
+	( 'VOID', 'BLUE'),
+	( 'VOLATILE', 'BLUE'),
+	( 'WHILE', 'BLUE'),
+
+    # Literals
+    ( 'INT-LITERAL', 'LIGHT-BLUE'),
+    ( 'DOUBLE-LITERAL', 'LIGHT-BLUE'),
+    ( 'BOOLEAN-LITERAL', 'PURPLE'),
+    ( 'CHAR-LITERAL', 'PINK'),
+    ( 'STRING-LITERAL', 'RED'),
+    ( 'NULL-LITERAL', 'PURPLE'),
+
+    # Comments
+    ( 'LINE-COMMENT', 'LIGHT-GREEN'),
+    ( 'BLOCK-COMMENT', 'LIGHT-GREEN')
+
+}
