@@ -71,8 +71,8 @@ class ProjectFile(models.Model):
 
 #chat message db entry
 class ChatMessage(models.Model):
-    message = models.CharField()
-    author = models.CharField()
+    message = models.TextField()
+    author = models.CharField(max_length = 20)
 
     def getMessage(self):
         return self.message
