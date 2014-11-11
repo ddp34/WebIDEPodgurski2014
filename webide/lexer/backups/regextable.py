@@ -132,7 +132,7 @@ regextable = {
     r'/*[\s\S]*/' : 'BLOCK-COMMENT',
 
 	# White space
-    '\s' : "WHITESPACE"
+    #'\s' : "WHITESPACE"
 
 }
 
