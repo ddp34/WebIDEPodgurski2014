@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from web_ide.forms import DeveloperForm
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -29,32 +29,12 @@ def user_login(request):
 def editor(request):
     
     #check if the user posted a chat message
-    if request.method == 'POST':
+    #if request.method == 'POST':
         #chat_message = ChatMessage()
         
         
 
     return render(request, 'web_ide/editor.html')
-
-def register(request):
-    registered = False
-    if request.method == 'POST':
-        user_form = DeveloperForm(data=request.POST)
-
-        if user_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-            registered = True
-
-        else:
-            print user_form.errors
-
-    else:
-        user_form = DeveloperForm()
-
-    return render(request, 'web_ide/register.html',
-                  {'developer_form': user_form, 'registered': registered})
 
 @login_required
 def restricted(request):

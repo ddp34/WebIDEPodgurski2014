@@ -12,12 +12,12 @@ class DeveloperManager(BaseUserManager):
         if not username:
             raise ValueError('Username required')
 
-        developer = self.model(username=username, email=self.normalize_email(email),)
+        user = self.model(username=username, email=self.normalize_email(email),)
 
-        developer.is_active = True
-        developer.set_password(password)
-        developer.save(using=self.db)
-        return developer
+        user.is_active = True
+        user.set_password(password)
+        user.save(using=self.db)
+        return user
 
     def create_superuser(self, username, email, password):
         administrator = self.create_user(username=username, email=email, password=password)
@@ -70,12 +70,12 @@ class ProjectFile(models.Model):
         return self.email
 
 #chat message db entry
-class ChatMessage(models.Model):
-    message = models.CharField()
-    author = models.CharField()
-
-    def getMessage(self):
-        return self.message
-
-    def getAuthor(self):
-        return self.author
+#class ChatMessage(models.Model):
+ #   message = models.CharField()
+  #  author = models.CharField()
+#
+ #   def getMessage(self):
+ #       return self.message
+#
+ #   def getAuthor(self):
+  #      return self.author
