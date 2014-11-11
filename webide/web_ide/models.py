@@ -70,12 +70,12 @@ class ProjectFile(models.Model):
         return self.email
 
 #chat message db entry
-#class ChatMessage(models.Model):
- #   message = models.CharField()
-  #  author = models.CharField()
-#
- #   def getMessage(self):
- #       return self.message
-#
- #   def getAuthor(self):
-  #      return self.author
+class ChatMessage(models.Model):
+    message = models.CharField()
+    author = models.CharField()
+
+    def getMessage(self):
+        return self.message
+
+    def getAuthor(self):
+        return self.author

@@ -1,3 +1,6 @@
+import re
+import regextable
+
 # lexerengine.py
 # EECS 393 webide
 
@@ -8,9 +11,35 @@
 # A term’s respective token will determine its syntax coloring.
 
 
-#elementRegexes: HashMap<String, String>
-# An associative array of key-value pairs key:regex -> value:token
-# Each text element is scanned and assigned a token based on which regex it matches
+class LexerEngine:
 
-#Method: tokensToElements(String[]) : String[]
-#Using regexes, parse the stream of tokens and and convert each to a Java language element. 
+
+
+    def tokenize(string filename):
+
+        # Open the text file representing the program
+
+        # Scan the text file and map
+
+    # Take a string and return the matching token from regextable
+    def string_to_token(string expression):
+
+        # If the input string matches a regular expression in the regextable
+
+
+
+
+
+
+
+
+    def map_tokens_to_colors(list token_list):
+
+
+
+# def0: scan the document, assign tokens, color text
+
+# def1: (helper) assign a token to a lexeme.
+
+# def2: (helper) color the text of a lexeme according to its token assignment.
+
