@@ -79,3 +79,7 @@ class ChatMessage(models.Model):
 
     def getAuthor(self):
         return self.author
+
+class Build(models.Model):
+    buildname = models.CharField(max_length=64)
+
