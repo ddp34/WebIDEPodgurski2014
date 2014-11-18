@@ -8,6 +8,10 @@
   <head>
     <title>WebIDE</title>
     <h1 align="center">WebIDE</h1>
+    {% if user.is_authenticated %}
+      <a href="web_ide/logout.html">logout</a>
+    {% endif %}
+
   </head>
 
   <body class="toplayer">

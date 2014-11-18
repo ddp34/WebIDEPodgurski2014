@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import logout_then_login
 
 
 def user_login(request):
@@ -19,7 +20,7 @@ def user_login(request):
                 return HttpResponse("Inactive account.")
         else:
             print "Login details invalid: {0}, {1}".format(username, password)
-            return HttpResponse("Login details invalid")
+            return render(request, 'web_ide/login.html')
     else:
         return render(request, 'web_ide/login.html', {})
 
@@ -31,8 +32,6 @@ def editor(request):
     #check if the user posted a chat message
     #if request.method == 'POST':
         #chat_message = ChatMessage()
-        
-        
 
     return render(request, 'web_ide/editor.html')
 
@@ -42,5 +41,4 @@ def restricted(request):
 
 @login_required
 def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect
+    return logout_then_login(request, 'web_ide/login.html')
