@@ -6,6 +6,9 @@ from django.contrib.auth.views import logout_then_login
 
 
 def user_login(request):
+    if request.user.is_authenticated():
+        return render(request, 'web_ide/editor.html')
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -19,8 +22,7 @@ def user_login(request):
             else:
                 return HttpResponse("Inactive account.")
         else:
-            print "Login details invalid: {0}, {1}".format(username, password)
-            return render(request, 'web_ide/login.html')
+            return render(request, 'web_ide/login.html', {'invalid': True})
     else:
         return render(request, 'web_ide/login.html', {})
 
@@ -41,4 +43,4 @@ def restricted(request):
 
 @login_required
 def user_logout(request):
-    return logout_then_login(request, 'web_ide/login.html')
+    return logout_then_login(request, 'login')
