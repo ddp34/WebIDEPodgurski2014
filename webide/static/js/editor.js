@@ -6,6 +6,7 @@ $.fn.extend({
 	    if (window.getSelection) {
 		sel = window.getSelection();
 		if(sel.getRangeAt && sel.rangeCount) {
+		    //don't do anything until we figure out how to insert a tab at the caret
 		    //range = sel.getRangeAt(0);
 		    //range.deleteContents();
 		    //var indent = document.createElement("p");
