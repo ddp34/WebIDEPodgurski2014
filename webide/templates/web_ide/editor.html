@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
-{% block body_block %}    
+{% block body_block %}
       <div class="editorpane">
-      
-        <div class="leftpane">
+
+	<div class="leftpane">
 	  <p>File Browser</p>
 	  <div class="filebrowserview">
-	    
+	    {% block file_browser_block %}{% endblock %}
 	  </div>
 	</div>
 
 	<div class="centerpane">
 	  <p>DummyFile.txt</p>
-	  <p id="fileview" class="filecontentsview" spellcheck="false" contenteditable="true">Editing Area... try it!</p>
+	  <p id="fileview" class="filecontentsview" spellcheck="false" contenteditable="true">{{ filetext }}</p>
 	</div>
 
 	<div class="rightpane">
@@ -22,13 +22,60 @@
 	    </div>
 	    <div class="entrywindow" contenteditable="true">
 	      Enter Chat Text Here...
-	    </div>	    
+	    </div>
 	  </div>
 	</div>
 
     <div class="bottompane">
-        <p class="buildview" spellcheck="false" contentedittable="true">Future build site</p>
+	<p class="buildview" spellcheck="false" contentedittable="true">Future build site</p>
     </div>
 
       </div>
+<script>
+//global variables
+
+//the sync polling interval (in milliseconds). the shorter, the more responsive.
+window['pollinginterval'] = 500
+
+//the client shadow for differential synchronization
+window['shadow'] = "{{ clishadow }}"
+
+//the caret position for this client, which we want to preserve
+window['caretpos'] = 0
+
+//functions
+
+//pings the server for a sync update. The server does the computations and returns a text and updated shadow
+//to the client.
+function pingServer() {
+
+//we need to keep the caret position
+
+//send POST request with ajax
+
+$.ajax ({
+url: '/web_ide/editor/',
+data: {clienttext: $("#fileview").text(), clientshadow: window['shadow'], csrfmiddlewaretoken:'{{csrf_token}}', posttype: 'syncrequest'},
+dataType: 'json',
+type: "POST",
+success: function(response) {
+//update text in editor
+$("#fileview").text(response.clienttext);
+//restore the caret position
+//update client shadow
+window['shadow'] = response.clientshadow;
+}
+})
+
+}
+
+//sets the sync function to run at the polling interval.
+//originally responded to a button, but now will be called upon page loading.
+function beginSync() {
+setInterval(pingServer, window['pollinginterval']);
+}
+
+//start synchronization immediately when document is ready
+$(document).ready(beginSync);
+</script>
 {% endblock %}

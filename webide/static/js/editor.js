@@ -19,54 +19,6 @@ $.fn.extend({
 	}
     })
 
-//global variables
-
-//the sync polling interval (in milliseconds). the shorter, the more responsive.
-window['pollinginterval'] = 500
-
-//the client shadow for differential synchronization
-window['shadow'] = "{{ clishadow }}"
-
-//the caret position for this client, which we want to preserve
-window['caretpos'] = 0
-
-//functions
-
-//pings the server for a sync update. The server does the computations and returns a text and updated shadow
-//to the client.
-function pingServer() {
-
-//we need to keep the caret position
-
-//send POST request with ajax
-
-$.ajax ({
-url: '/sync/',
-//middleware token must be sent for django to accept the connection;
-//so we will also use it as a 'session id'
-data: { top: $(“#fileview”).text(), clientshadow: window['shadow'], csrfmiddlewaretoken:'{{csrf_token}}'},
-dataType: 'json',
-type: "POST",
-success: function(response) {
-//update the text in box
-$(“#fileview”).text(response.topDoc);
-//restore the caret position
-//update client shadow
-window['shadow'] = response.clientshadow;
-}
-})
-
-}
-
-//sets the sync function to run at the polling interval.
-//originally responded to a button, but now will be called upon page loading.
-function beginSync() {
-setInterval(pingServer, window['pollinginterval']);
-}
-
-//start synchronization immediately when document is ready
-//$(document).ready(beginSync);
-
 //This is our code
 $(document).ready(function() {
 	//set key listener
