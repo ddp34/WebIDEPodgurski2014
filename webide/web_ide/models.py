@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractBaseUser
 from django.core.validators import RegexValidator
+from datetime import datetime
 
 
 # This is to implement the Administrator functionality
@@ -79,6 +80,75 @@ class ChatMessage(models.Model):
 
     def getAuthor(self):
         return self.author
+
+'''
+class Room(models.Model):
+    belongs_to_type = models.CharField(max_length=100, blank=True, null=True)
+    belongs_to_id = models.IntegerField(blank=True, null=True)
+    created = models.DateTimeField()
+    comment = models.TextField(blank=True, null=True)
+    objects = RoomManager() # custom manager
+
+    class Meta():
+        unique_together = (('belongs_to_type', 'belongs_to_id'))
+
+    def say(self, type, sender, message):
+        #Say something in le chat
+        m = Message(self, type, sender, message)
+        m.save()
+        return m
+
+    def messages(self, after=None):
+        m = Message.objects.filter(room=self)
+        if after:
+            m = m.filter(pk__gt=after)
+        return m
+
+    def __unicode__(self):
+        return 'Chat for %s %d' % (self.belongs_to_type, self.belongs_to_id)
+'''
+
+class RoomManager(models.Manager):
+    '''Custom model manager for rooms, this is used for "table-level" operations'''
+    def create(self, parent_type, parent_id):
+        '''Creates a new chat room and registers it to the calling object'''
+        # the first none is for the ID
+        r = self.model(None, parent_type, parent_id, datetime.now())
+        r.save()
+        return r
+
+    def get_room(self, parent_type, parent_id):
+        '''Get a room through its parent.'''
+        return self.get(belongs_to_type=parent_type, belongs_to_id=parent_id)
+
+class Message(models.Model):
+    '''A message that belongs to a chat room'''
+    MESSAGE_TYPE_CHOICES = (
+    ('s','system'),
+    ('a','action'),
+    ('m', 'message'),
+    ('j','join'),
+    ('l','leave'),
+    ('n','notification')
+)
+   # room = models.ForeignKey(Room)
+    type = models.CharField(max_length=1, choices= MESSAGE_TYPE_CHOICES)
+    sender = models.CharField(max_length=50, blank=True)
+    message = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        '''Each message type has a special representation, return that representation.
+        This will also be translator AKA i18l friendly.'''
+        if self.type in ['s','m','n']:
+            return u'*** %s' % self.message
+        elif self.type == 'j':
+            return '*** %s has joined...' % self.sender
+        elif self.type == 'l':
+            return '*** %s has left...' % self.sender
+        elif self.type == 'a':
+            return '*** %s %s' % (self.sender, self.message)
+        return ''
 
 class Build(models.Model):
     buildname = models.CharField(max_length=64)
