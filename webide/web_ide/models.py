@@ -175,3 +175,18 @@ class Message(models.Model):
 class Build(models.Model):
     buildname = models.CharField(max_length=64)
 
+#server text for differential sync. There should only be one instance of this per file.
+class ServerText(models.Model):
+    #filename
+    filename = models.TextField(max_length=128)
+    #text
+    text = models.TextField(max_length=512)
+
+#server shadow for differential sync. There will be a server shadow for each client/file access.
+class ServerShadow(models.Model):
+    #filename
+    filename = models.TextField(max_length=128)
+    #text
+    text = models.TextField(max_length=512)
+    #name, will be based on client's session token
+    name = models.TextField(max_length=128)
