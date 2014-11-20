@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractBaseUser
 from django.core.validators import RegexValidator
 from datetime import datetime
+import os
+import mimetypes
 
 
 # This is to implement the Administrator functionality
@@ -54,21 +56,41 @@ class Developer(AbstractBaseUser, PermissionsMixin):
 
 #class to represent the filesystem
 
+
 class ProjectFile(models.Model):
     filename = models.CharField(max_length=64)
-    contents = models.CharField(max_length=2056)
+    path = models.CharField(max_length=200)
+
     #pointers to contained files, if directory
-    
 
-    def getName(self):
-        return self.name
+    def getname(self):
+        return self.filename
 
-    def getContents(self):
-        return self.contents
+    def isdir(self, path):
+        p = os.path.realpath(os.path.join(self.path, path))
+        if not p.startswith(self.path):
+            raise ValueError(path)
+        return os.path.isdir(p)
 
-    def isDir(self, path):
-        return os.path.isdir(path)
-        return self.email
+    def files(self, path=''):
+        p = os.path.realpath(os.path.join(self.path, path))
+        if not p.startswith(self.path):
+            raise ValueError(path)
+        l = os.listdir(p)
+        if path:
+            l.insert(0, '..')
+            return [(f, os.path.isdir(os.path.join(p, f)),
+                     mimetypes.guess_type(f)[0] or 'applications/octetstream') for f in l]
+
+    def file(self, path):
+        p = os.path.realpath(os.path.join(self.path, path))
+        if p.startswith(self.path):
+            (t, e) = mimetypes.guess_type(p)
+            return p, t or 'application/octetstream'
+        else:
+            raise ValueError(path)
+
+
 
 #chat message db entry
 class ChatMessage(models.Model):
