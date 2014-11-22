@@ -1,7 +1,7 @@
 import plyj.parser as plyj
 
 
-class HighlightingEngine:
+class HighlightingEngine(object):
 
     color_table = {
 
@@ -73,13 +73,12 @@ class HighlightingEngine:
         # tokenizing
         f = open(filename)
         parser = plyj.Parser()
-        token_list = parser.tokenize_file(f)
+        parser.tokenize_file(f)
+        token_list = parser.token_list
         # list contains instances of LexToken from PLY (Python Lex-Yacc)
         # e.g. LexToken(PUBLIC,'public',1,0)
-
-
-        for i in range (0, token_list.size):
-            token_to_color_map[t] = self.highlight_element(t)
+        for t in token_list:
+            self.token_to_color_map[t] = self.highlight_element(t)
 
     # return the hex color code for a single token
     def highlight_element(self, token):

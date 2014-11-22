@@ -2000,6 +2000,8 @@ class MyParser(ExpressionParser, NameParser, LiteralParser, TypeParser, ClassPar
 
 class Parser(object):
 
+    token_list = []
+
     def __init__(self):
         self.lexer = lex.lex(module=MyLexer(), optimize=1)
         self.parser = yacc.yacc(module=MyParser(), start='goal', optimize=1)
@@ -2007,6 +2009,7 @@ class Parser(object):
     def tokenize_string(self, code):
         self.lexer.input(code)
         for token in self.lexer:
+            self.token_list.append(token)
             print(token)
 
     def tokenize_file(self, _file):
