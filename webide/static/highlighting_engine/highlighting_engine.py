@@ -67,6 +67,8 @@ class HighlightingEngine:
         'LINE_COMMENT' : '#009933', # LIGHT-GREEN
         'BLOCK_COMMENT' : '#009933' }
 
+    token_to_color_map = {}
+
     def highlight_syntax(self, filename):
         # tokenizing
         f = open(filename)
@@ -75,14 +77,14 @@ class HighlightingEngine:
         # list contains instances of LexToken from PLY (Python Lex-Yacc)
         # e.g. LexToken(PUBLIC,'public',1,0)
 
-        token_to_color_map = []
-        for t in token_list:
-            token_to_color_map[t] = highlight_element(t)
+
+        for i in range (0, token_list.size):
+            token_to_color_map[t] = self.highlight_element(t)
 
     # return the hex color code for a single token
     def highlight_element(self, token):
         type = token.type
-        for k, v in color_table.iteritems():
+        for k, v in self.color_table.iteritems():
             if (type == k): return v
             else: return 'default'
 
