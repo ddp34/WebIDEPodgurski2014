@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractBaseUser
+from django.contrib.auth import hashers
 from django.core.validators import RegexValidator
 from datetime import datetime
 import os
@@ -15,7 +16,7 @@ class DeveloperManager(BaseUserManager):
         if not username:
             raise ValueError('Username required')
 
-        user = self.model(username=username, email=self.normalize_email(email),)
+        user = self.model(username=username, email=email)
 
         user.is_active = True
         user.set_password(password)
@@ -54,6 +55,10 @@ class Developer(AbstractBaseUser, PermissionsMixin):
     def __unicode__(self):
         return self.username
 
+    def check_password(self, raw_pass):
+        return hashers.check_password(raw_pass, self.password)
+
+
 #class to represent the filesystem
 
 
@@ -89,6 +94,7 @@ class ProjectFile(models.Model):
             return p, t or 'application/octetstream'
         else:
             raise ValueError(path)
+
 
 
 
