@@ -16,7 +16,7 @@ class DeveloperManager(BaseUserManager):
         if not username:
             raise ValueError('Username required')
 
-        user = self.model(username=username, email=email)
+        user = self.model(username=username, email=self.normalize_email(email),)
 
         user.is_active = True
         user.set_password(password)

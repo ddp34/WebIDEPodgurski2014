@@ -50,7 +50,7 @@ class SyntaxTestCase(TestCase):
             if (type == k): return v
             else: return 'default' '''
 
-    def test_token_mapping
+    def test_token_mapping(self):
         he = HighlightingEngine()
         hard_mapping = he.color_table["INT"]
 
