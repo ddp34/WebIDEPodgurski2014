@@ -1,4 +1,4 @@
-import plyj.parser as plyj
+from webide.web_ide.syntax import plyj as plyj
 
 
 class HighlightingEngine(object):

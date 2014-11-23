@@ -40,3 +40,7 @@ class DeveloperTestCase(TestCase):
         #test the getter methods
         self.assertEqual(user.get_full_name(), "testusername")
         self.assertEqual(user.get_short_name(), "testusername")
+
+class SyntaxTestCase(TestCase):
+    # tests for single
+

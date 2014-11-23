@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
 
-import ply.lex as lex
-import ply.yacc as yacc
-from .model import *
+from .webide.web_ide.syntax.plyj.model import *
+from webide.web_ide.syntax.plyj import ply as lex
+
 
 class MyLexer(object):
 
