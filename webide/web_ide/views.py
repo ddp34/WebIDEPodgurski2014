@@ -6,12 +6,15 @@ from django.contrib.auth.views import logout_then_login
 
 #import text sync engine and dependencies
 from diffsync import DiffSync
+from textconvert import TextConvert
 from web_ide.models import ServerText, ServerShadow
 
 import json
+import re
 
 #keep a static DiffSync object to run synchronizations
 diff_sync_engine = DiffSync()
+text_convert = TextConvert()
 
 def user_login(request):
     if request.user.is_authenticated():
