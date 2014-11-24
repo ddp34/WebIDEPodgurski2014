@@ -47,6 +47,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'web_ide',
+    'jquery',
+    'jquery_ui',
 )
 
 # Controls password hashing control.
@@ -103,6 +105,8 @@ USE_TZ = True
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = 'static/collect/'
 
 STATICFILES_DIRS = (
     STATIC_PATH,
