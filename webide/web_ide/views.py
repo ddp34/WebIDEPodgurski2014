@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login
 
@@ -16,6 +16,7 @@ import re
 diff_sync_engine = DiffSync()
 text_convert = TextConvert()
 
+
 def user_login(request):
     if request.user.is_authenticated():
         return render(request, 'web_ide/editor.html')
@@ -26,7 +27,7 @@ def user_login(request):
 
         user = authenticate(username=username, password=password)
 
-        if user:
+        if user is not None:
             if user.is_active:
                 login(request, user)
                 return HttpResponseRedirect('/web_ide/editor.html')
@@ -94,3 +95,4 @@ def restricted(request):
 @login_required
 def user_logout(request):
     return logout_then_login(request, 'login')
+

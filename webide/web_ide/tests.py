@@ -3,7 +3,8 @@ from web_ide.models import DeveloperManager
 from web_ide.models import Developer
 from web_ide.models import ProjectFile
 from web_ide.forms import DeveloperForm
-
+from webide.web_ide.syntax.highlighting_engine import HighlightingEngine
+from webide.web_ide.syntax.plyj.ply.lex import LexToken
 #test regexes for user credentials
 class UserCredentialsTestCase(TestCase):
 
@@ -40,3 +41,24 @@ class DeveloperTestCase(TestCase):
         #test the getter methods
         self.assertEqual(user.get_full_name(), "testusername")
         self.assertEqual(user.get_short_name(), "testusername")
+
+class SyntaxTestCase(TestCase):
+    # tests for highlighting single element:
+    ''' def highlight_element(self, token):
+        type = token.type
+        for k, v in self.color_table.iteritems():
+            if (type == k): return v
+            else: return 'default' '''
+
+    def test_token_mapping(self):
+        he = HighlightingEngine()
+        hard_mapping = he.color_table["INT"]
+
+        test_tok = LexToken('INT', 'int', 1, 1)
+        test_mapping = he.highlight_element(test_tok)
+
+        self.assertEqual(hard_mapping, test_mapping)
+
+    # tests for tokenizing and mapping entire file:
+
+
