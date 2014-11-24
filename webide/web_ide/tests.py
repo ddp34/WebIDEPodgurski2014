@@ -43,7 +43,7 @@ class DeveloperTestCase(TestCase):
         self.assertEqual(user.get_short_name(), "testusername")
 
 class SyntaxTestCase(TestCase):
-    # tests for highlighting single element:
+    # tests for highlighting single element
     ''' def highlight_element(self, token):
         type = token.type
         for k, v in self.color_table.iteritems():
@@ -59,6 +59,5 @@ class SyntaxTestCase(TestCase):
 
         self.assertEqual(hard_mapping, test_mapping)
 
-    # tests for tokenizing and mapping entire file:
 
 
