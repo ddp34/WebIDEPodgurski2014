@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 from datetime import datetime
 import os
 from django.core.files.storage import FileSystemStorage
-from django.core.files.base import ContentFile
+from django.core.files.base import File
 
 
 # This is to implement the Administrator functionality
@@ -65,8 +65,13 @@ class Developer(AbstractBaseUser, PermissionsMixin):
 
 class ProjectFiles(FileSystemStorage):
 
-    def create_file(self, name, content=''):
-        return self.save(name, content)
+    def create_file(self, name, content=None):
+        if content is None:
+            f = open('temp.txt')
+        else:
+            f = content
+
+        return self.save(name, f)
 
     def list(self, path):
         contents = self.listdir(path)

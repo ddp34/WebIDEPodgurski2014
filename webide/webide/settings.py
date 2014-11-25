@@ -36,7 +36,9 @@ AUTH_USER_MODEL = 'web_ide.Developer'
 
 AUTHENTICATION_BACKENDS = ('web_ide.backends.AuthBackend',)
 
-#MEDIA_ROOT =
+PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'userfiles')
 
 
 # Application definition
