@@ -36,6 +36,8 @@ AUTH_USER_MODEL = 'web_ide.Developer'
 
 AUTHENTICATION_BACKENDS = ('web_ide.backends.AuthBackend',)
 
+#MEDIA_ROOT =
+
 
 # Application definition
 
