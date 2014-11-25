@@ -102,6 +102,13 @@ class ProjectFiles(FileSystemStorage):
         self.delete_file(temp)
         return written
 
+    def write_string_to_file(self, name, inputString):
+        #intermediate file, for now this must be used to write to a file with this API
+        intermed = open(name+ "-intermediate.txt", 'w+')
+        intermed.write(inputString)
+        #intermed.close()
+        return self.write_file(name, intermed)
+
     def rename_file(self, newname, oldname):
         new = self.create_file(newname, self.open_file(oldname))
         self.delete_file(oldname)
