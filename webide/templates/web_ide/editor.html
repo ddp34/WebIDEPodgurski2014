@@ -39,7 +39,7 @@
 window['pollinginterval'] = 500
 
 //the client shadow for differential synchronization
-window['shadow'] = "{{ clishadow }}"
+window['shadow'] = "{% filter escapejs %} {{ clishadow }} {% endfilter %}"
 
 //the caret position for this client, which we want to preserve
 window['caretpos'] = 0
