@@ -4,6 +4,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login
 
+#for file system
+from web_ide.models import ProjectFiles
+import os
+
 #import text sync engine and dependencies
 from diffsync import DiffSync
 from web_ide.models import ServerText, ServerShadow
@@ -12,6 +16,10 @@ import json
 
 #keep a static DiffSync object to run synchronizations
 diff_sync_engine = DiffSync()
+
+
+#Base directory for file system
+BASE_DIR = './'
 
 
 def user_login(request):
@@ -93,3 +101,6 @@ def restricted(request):
 def user_logout(request):
     return logout_then_login(request, 'login')
 
+
+def file_browser(request):
+    return render(request, 'filebrowser.html')

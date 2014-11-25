@@ -4,7 +4,8 @@ from django.contrib.auth import hashers
 from django.core.validators import RegexValidator
 from datetime import datetime
 import os
-import mimetypes
+from django.core.files.storage import FileSystemStorage
+from django.core.files.base import ContentFile
 
 
 # This is to implement the Administrator functionality
@@ -62,40 +63,44 @@ class Developer(AbstractBaseUser, PermissionsMixin):
 #class to represent the filesystem
 
 
-class ProjectFile(models.Model):
-    filename = models.CharField(max_length=64)
-    path = models.CharField(max_length=200)
+class ProjectFiles(FileSystemStorage):
 
-    #pointers to contained files, if directory
+    def create_file(self, name, content=''):
+        return self.save(name, content)
 
-    def getname(self):
-        return self.filename
+    def list(self, path):
+        contents = self.listdir(path)
+        directories = contents[0]
+        files = contents[1]
+        return files, directories
 
-    def isdir(self, path):
-        p = os.path.realpath(os.path.join(self.path, path))
-        if not p.startswith(self.path):
-            raise ValueError(path)
-        return os.path.isdir(p)
-
-    def files(self, path=''):
-        p = os.path.realpath(os.path.join(self.path, path))
-        if not p.startswith(self.path):
-            raise ValueError(path)
-        l = os.listdir(p)
-        if path:
-            l.insert(0, '..')
-            return [(f, os.path.isdir(os.path.join(p, f)),
-                     mimetypes.guess_type(f)[0] or 'applications/octetstream') for f in l]
-
-    def file(self, path):
-        p = os.path.realpath(os.path.join(self.path, path))
-        if p.startswith(self.path):
-            (t, e) = mimetypes.guess_type(p)
-            return p, t or 'application/octetstream'
+    def open_file(self, name):
+        if self.exists(name):
+            return self.open(name, 'rb')
         else:
-            raise ValueError(path)
+            return False
 
+    def delete_file(self, name):
+        return self.delete(name)
 
+    def make_directory(self, path, name):
+        try:
+            os.mkdir(os.path.join(self.location, path, name))
+        except OSError as e:
+            if e.errno == 17:
+                return False
+        return True
+
+    def write_file(self, name, content):
+        temp = self.rename_file(name + '-temp', name)
+        written = self.save(name, content)
+        self.delete_file(temp)
+        return written
+
+    def rename_file(self, newname, oldname):
+        new = self.create_file(newname, self.open_file(oldname))
+        self.delete_file(oldname)
+        return new
 
 
 #chat message db entry
