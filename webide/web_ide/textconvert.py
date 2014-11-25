@@ -6,8 +6,6 @@ to valid Java source code. This is accomplished by translating between standard 
 tokens such as '\n' to their HTML equivalents, such as '<br />'.
 '''
 
-import re
-
 class TextConvert:
 
     '''
