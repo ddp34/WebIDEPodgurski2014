@@ -67,7 +67,7 @@ class ProjectFiles(FileSystemStorage):
 
     def create_file(self, name, content=None):
         if content is None:
-            f = open('temp.txt')
+            f = open('temp.txt', 'w+')
         else:
             f = content
 
