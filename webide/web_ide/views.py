@@ -10,12 +10,15 @@ import os
 
 #import text sync engine and dependencies
 from diffsync import DiffSync
+from textconvert import TextConvert
 from web_ide.models import ServerText, ServerShadow
 
 import json
+import re
 
 #keep a static DiffSync object to run synchronizations
 diff_sync_engine = DiffSync()
+text_convert = TextConvert()
 
 
 #Base directory for file system
