@@ -57,6 +57,7 @@ body {
 		  box-sizing: border-box;
 		  padding: 5px;
 		  text-align: left;
+		  font-family: "Courier New", Courier, monospace;
 		  font-size: 14pt;
 		  background-color: #414141;
 		  color: #FDFFC7;
