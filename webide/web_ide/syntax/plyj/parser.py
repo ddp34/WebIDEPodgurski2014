@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 
-from .webide.web_ide.syntax.plyj.model import *
-from webide.web_ide.syntax.plyj import ply as lex
+from ply import *
 
 
 class MyLexer(object):
