@@ -5,7 +5,6 @@ from django.core.validators import RegexValidator
 from datetime import datetime
 import os
 from django.core.files.storage import FileSystemStorage
-from django.core.files.base import File
 
 
 # This is to implement the Administrator functionality
@@ -61,9 +60,12 @@ class Developer(AbstractBaseUser, PermissionsMixin):
 
 
 #class to represent the filesystem
-
+#most of this is from the Django FileSystemStorage source code
+#but with some changes, such as make_directory
 
 class ProjectFiles(FileSystemStorage):
+
+    #the save method throughout this class is inherited from FileSystemStorage
 
     def create_file(self, name, content=None):
         if content is None:
@@ -73,6 +75,8 @@ class ProjectFiles(FileSystemStorage):
 
         return self.save(name, f)
 
+    #list all files and directories in a directory
+    #returns the directories, then the files
     def list(self, path):
         contents = self.listdir(path)
         directories = contents[0]
@@ -91,6 +95,7 @@ class ProjectFiles(FileSystemStorage):
     def make_directory(self, path, name):
         try:
             os.mkdir(os.path.join(self.location, path, name))
+        #got this from a StackOverflow post
         except OSError as e:
             if e.errno == 17:
                 return False
@@ -113,6 +118,10 @@ class ProjectFiles(FileSystemStorage):
         new = self.create_file(newname, self.open_file(oldname))
         self.delete_file(oldname)
         return new
+
+
+#class Snapshot():
+
 
 
 #chat message db entry

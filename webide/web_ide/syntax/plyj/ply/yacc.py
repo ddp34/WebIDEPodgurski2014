@@ -58,7 +58,6 @@
 # consider to be good Python "coding style."   Modify the code at your
 # own risk!
 # ----------------------------------------------------------------------------
-from webide.web_ide.syntax.plyj.ply import lex
 
 __version__    = "3.4"
 __tabversion__ = "3.2"       # Table version
@@ -85,9 +84,7 @@ resultlimit = 40               # Size limit of results when running in debug mod
 
 pickle_protocol = 0            # Protocol to use when writing pickle files
 
-import types
-import sys
-import os.path
+import re, types, sys, os.path
 
 # Compatibility function for python 2.6/3.0
 if sys.version_info[0] < 3:
@@ -105,8 +102,10 @@ except AttributeError:
 
 # Python 2.x/3.0 compatibility.
 def load_ply_lex():
-    if sys.version_info[0] < 3: \
+    if sys.version_info[0] < 3:
+        import lex
     else:
+        import ply.lex as lex
     return lex
 
 # This object is a stand-in for a logging object created by the 

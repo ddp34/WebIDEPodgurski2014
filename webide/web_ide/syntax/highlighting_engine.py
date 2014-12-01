@@ -1,4 +1,4 @@
-from webide.web_ide.syntax import plyj as plyj
+from plyj import parser as plyj
 
 
 class HighlightingEngine(object):
@@ -82,9 +82,6 @@ class HighlightingEngine(object):
 
     # return the hex color code for a single token
     def highlight_element(self, token):
-        type = token.type
-        for k, v in self.color_table.iteritems():
-            if (type == k): return v
-            else: return 'default'
-
+        tok_type = str(token.type)
+        if tok_type in self.color_table: return tok_type
 
