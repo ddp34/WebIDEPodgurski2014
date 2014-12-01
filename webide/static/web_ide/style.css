@@ -51,6 +51,11 @@ body {
 	  outline: black solid thin;	  
 }
 
+.filename {
+	  height: 10%;
+	  width: 100%;
+}
+
 .filecontentsview {
 		  height: 90%;
 		  width: 100%;
@@ -58,9 +63,9 @@ body {
 		  padding: 5px;
 		  text-align: left;
 		  font-family: "Courier New", Courier, monospace;
-		  font-size: 14pt;
-		  background-color: #414141;
-		  color: #FDFFC7;
+		  font-size: 12pt;
+		  background-color: #34495e;
+		  color: #ecf0f1;
 		  overflow: scroll;
 		  border: none;
 		  outline: none;
