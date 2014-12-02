@@ -48,22 +48,25 @@ body {
 	  width: 58%;
 	  height: 98%;
 	  display: inline-block;
-	  outline: black solid thin;	  
 }
 
 .filename {
-	  height: 10%;
+	  height: 6%;
 	  width: 100%;
+	  border-radius: 5px 5px 0px 0px;
+	  background-color: #bdc3c7;
 }
 
 .filecontentsview {
-		  height: 90%;
+		  height: 94%;
 		  width: 100%;
+		  border-radius: 0px 0px 5px 5px;
 		  box-sizing: border-box;
 		  padding: 5px;
 		  text-align: left;
 		  font-family: "Courier New", Courier, monospace;
 		  font-size: 12pt;
+		  tab-size: 4;
 		  background-color: #34495e;
 		  color: #ecf0f1;
 		  overflow: scroll;
