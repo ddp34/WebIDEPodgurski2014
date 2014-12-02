@@ -51,16 +51,25 @@ body {
 	  outline: black solid thin;	  
 }
 
+.filename {
+	  height: 10%;
+	  width: 100%;
+}
+
 .filecontentsview {
-		  height: 86%;
+		  height: 90%;
+		  width: 100%;
+		  box-sizing: border-box;
 		  padding: 5px;
-		  margin: 3px;
 		  text-align: left;
-		  background-color: #414141;
-		  color: #FDFFC7;
+		  font-family: "Courier New", Courier, monospace;
+		  font-size: 12pt;
+		  background-color: #34495e;
+		  color: #ecf0f1;
 		  overflow: scroll;
 		  border: none;
 		  outline: none;
+		  resize: none;
 }
 
 .chatview {

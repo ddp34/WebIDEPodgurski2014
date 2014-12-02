@@ -1,3 +1,8 @@
 .idea/
 *.pyc
 *~
+webide/templates/editortest.html
+
+webide/web_ide/syntax/parsetab.py
+
+webide/web_ide/syntax/parser.out

@@ -11,8 +11,10 @@
 	</div>
 
 	<div class="centerpane">
-	  <p>DummyFile.txt</p>
-	  <p id="fileview" class="filecontentsview" spellcheck="false" contenteditable="true">{{ filetext }}</p>
+	  <div class="filename">
+	    DummyFile.txt
+	  </div>
+	  <textarea id="fileview" class="filecontentsview" spellcheck="false">{{ filetext }}</textarea>
 	</div>
 
 	<div class="rightpane">
@@ -39,30 +41,63 @@
 window['pollinginterval'] = 500
 
 //the client shadow for differential synchronization
-window['shadow'] = "{{ clishadow }}"
+window['shadow'] = "{% filter escapejs %} {{ clishadow }} {% endfilter %}"
 
 //the caret position for this client, which we want to preserve
 window['caretpos'] = 0
 
 //functions
 
+//STACK OVERFLOW
+function setSelectionRange(input, selectionStart, selectionEnd) {
+  if (input.setSelectionRange) {
+    input.focus();
+    input.setSelectionRange(selectionStart, selectionEnd);
+  }
+  else if (input.createTextRange) {
+    var range = input.createTextRange();
+    range.collapse(true);
+    range.moveEnd('character', selectionEnd);
+    range.moveStart('character', selectionStart);
+    range.select();
+  }
+}
+
+//END STACK OVERFLOW
+
+function setCaretToPos (input, pos) {
+  setSelectionRange(input, pos, pos);
+}
+
+//sets the caret position
+function setCaret(pos) {
+var range = document.createRange();
+range.setStart($("#fileview")[0], pos);
+range.collapse(true);
+window.getSelection().removeAllRanges();
+window.getSelection().addRange(range);
+}
+
 //pings the server for a sync update. The server does the computations and returns a text and updated shadow
 //to the client.
 function pingServer() {
 
 //we need to keep the caret position
+window['caretpos'] = $("#fileview")[0].selectionStart;
 
 //send POST request with ajax
 
 $.ajax ({
 url: '/web_ide/editor/',
-data: {clienttext: $("#fileview").text(), clientshadow: window['shadow'], csrfmiddlewaretoken:'{{csrf_token}}', posttype: 'syncrequest'},
+data: {clienttext: $("#fileview").val(), clientshadow: window['shadow'], csrfmiddlewaretoken:'{{csrf_token}}', posttype: 'syncrequest'},
 dataType: 'json',
 type: "POST",
 success: function(response) {
 //update text in editor
-$("#fileview").text(response.clienttext);
+$("#fileview").val(response.clienttext);
 //restore the caret position
+//setCaret(1);
+setCaretToPos(document.getElementById("fileview"), window['caretpos']);
 //update client shadow
 window['shadow'] = response.clientshadow;
 }
