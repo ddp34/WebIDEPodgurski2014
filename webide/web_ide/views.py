@@ -53,16 +53,16 @@ def editor(request):
         if request.POST['posttype'] == "syncrequest":
             #get server text of file
             try:
-                servertext = ServerText.objects.get(filename="dummyfile.txt")
+                servertext = ServerText.objects.get(filename=request.POST['filename'])
             except ServerText.DoesNotExist:
                 #if the file doesn't exist, create it
-                servertext = ServerText(filename="dummyfile.txt", text="New file!")
+                servertext = ServerText(filename=request.POST['filename'], text="New file")
             #get server shadow, use the csrf token as a unique identifier
             try:
                 servershadow = ServerShadow.objects.get(name=request.POST['csrfmiddlewaretoken'])
             except ServerShadow.DoesNotExist:
                 #if the user doesn't have a server shadow for this file, create one
-                servershadow = ServerShadow(filename="dummyfile.txt", text=request.POST['clienttext'], name=request.POST['csrfmiddlewaretoken'])
+                servershadow = ServerShadow(filename=request.POST['filename'], text=request.POST['clienttext'], name=request.POST['csrfmiddlewaretoken'])
 
             #now that we have all the components, run the sync algorithm
             syncresults = diff_sync_engine.synchronizeDocs(request.POST['clienttext'], request.POST['clientshadow'], servertext.text, servershadow.text)
@@ -78,13 +78,32 @@ def editor(request):
             response_data['clienttext'] = syncresults[0]
             response_data['clientshadow'] = syncresults[1]
 
-            return HttpResponse(json.dumps(response_data), content_type="appliation/json")
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        
+        #open a different file
+        if request.POST['posttype'] == "openfile":
+            print "open file " + request.POST['filename'] + " ..."
+            try:
+                #retrieve server text and push it to user
+                servertext = ServerText.objects.get(filename=request.POST['filename'])
+            except ServerText.DoesNotExist:
+                #create buffer if it doesn't exist already
+                servertext = ServerText(filename=request.POST['filename'], text=project_files.open_file(request.POST['filename']).read())
+                servertext.save()
+            response_data = {}
+            response_data['clienttext'] = servertext.text
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     else:
         #simple GET request
 
-        #retrieve server text and push it to user
-        servertext = ServerText.objects.get(filename="dummyfile.txt")
+        try:
+            #retrieve server text and push it to user
+            servertext = ServerText.objects.get(filename="README.md")
+        except ServerText.DoesNotExist:
+            #create buffer if it doesn't exist already
+            servertext = ServerText(filename="README.md", text=project_files.open_file("README.md").read())
+            servertext.save()
         #list of files in root dir (for now)
         rootfilenames = project_files.list("")[0]
         context = {'filetext': servertext.text, 'clishadow': servertext.text, 'files': rootfilenames}

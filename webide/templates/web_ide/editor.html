@@ -8,7 +8,7 @@
 	  <div class="filebrowserview">
 	    <ul class="filelist">
 	      {% for filename in files %}
-	      <li class="filenode">{{ filename }}</li>
+	      <li class="filenode"><a href="#" onclick="openFile('{{ filename }}')">{{ filename }}</a></li>
 	      {% endfor %}
 	    </ul>
 	  </div>
@@ -16,7 +16,7 @@
 
 	<div class="centerpane">
 	  <div class="filename">
-	    DummyFile.txt
+	    README.md
 	  </div>
 	  <textarea id="fileview" class="filecontentsview" spellcheck="false">{{ filetext }}</textarea>
 	</div>
@@ -44,6 +44,12 @@
 //the sync polling interval (in milliseconds). the shorter, the more responsive.
 window['pollinginterval'] = 500
 
+//polling ID, used to stop polling on demand
+window['pollingid'] = 0
+
+//filename of the current file open
+window['curfilename'] = "README.md"
+
 //the client shadow for differential synchronization
 window['shadow'] = "{% filter escapejs %} {{ clishadow }} {% endfilter %}"
 
@@ -52,7 +58,6 @@ window['caretpos'] = 0
 
 //functions
 
-//STACK OVERFLOW
 function setSelectionRange(input, selectionStart, selectionEnd) {
   if (input.setSelectionRange) {
     input.focus();
@@ -66,8 +71,6 @@ function setSelectionRange(input, selectionStart, selectionEnd) {
     range.select();
   }
 }
-
-//END STACK OVERFLOW
 
 function setCaretToPos (input, pos) {
   setSelectionRange(input, pos, pos);
@@ -93,7 +96,7 @@ window['caretpos'] = $("#fileview")[0].selectionStart;
 
 $.ajax ({
 url: '/web_ide/editor/',
-data: {clienttext: $("#fileview").val(), clientshadow: window['shadow'], csrfmiddlewaretoken:'{{csrf_token}}', posttype: 'syncrequest'},
+data: {clienttext: $("#fileview").val(), clientshadow: window['shadow'], csrfmiddlewaretoken:'{{csrf_token}}', filename: window['curfilename'], posttype: 'syncrequest'},
 dataType: 'json',
 type: "POST",
 success: function(response) {
@@ -112,7 +115,53 @@ window['shadow'] = response.clientshadow;
 //sets the sync function to run at the polling interval.
 //originally responded to a button, but now will be called upon page loading.
 function beginSync() {
-setInterval(pingServer, window['pollinginterval']);
+window['pollingid'] = setInterval(pingServer, window['pollinginterval']);
+}
+
+//stops sync function until beginSync() is called again.
+function stopSync() {
+clearInterval(window['pollingid']);
+}
+
+//sleep function
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+//click function for filebrowser.
+//opens the new file in code editor window
+function openFile(filename) {
+
+//alert(filename);
+
+stopSync();
+//wait for old server responses
+sleep(1000);
+window['curfilename'] = filename;
+$(".filename").text(filename);
+//get new file data from server
+$.ajax({
+
+url: '/web_ide/editor/',
+data: {filename: filename, posttype: 'openfile', csrfmiddlewaretoken: '{{ csrf_token }}'},
+dataType: 'json',
+type: "POST",
+success: function(response) {
+//update client text and shadow
+$("#fileview").val(response.clienttext);
+window['shadow'] = response.clienttext;
+}
+
+});
+
+//restart sync
+beginSync();
+
 }
 
 //start synchronization immediately when document is ready
