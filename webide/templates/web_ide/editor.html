@@ -6,7 +6,11 @@
 	<div class="leftpane">
 	  <p>File Browser</p>
 	  <div class="filebrowserview">
-	    {% block file_browser_block %}{% endblock %}
+	    <ul class="filelist">
+	      {% for filename in files %}
+	      <li class="filenode">{{ filename }}</li>
+	      {% endfor %}
+	    </ul>
 	  </div>
 	</div>
 

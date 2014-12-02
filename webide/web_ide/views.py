@@ -7,12 +7,15 @@ from models import  Room,Message
 
 #import text sync engine and dependencies
 from diffsync import DiffSync
-from web_ide.models import ServerText, ServerShadow
+from web_ide.models import *
 
 import json
 
 #keep a static DiffSync object to run synchronizations
 diff_sync_engine = DiffSync()
+
+#filesystem controller
+project_files = ProjectFiles()
 
 
 def user_login(request):
@@ -82,7 +85,9 @@ def editor(request):
 
         #retrieve server text and push it to user
         servertext = ServerText.objects.get(filename="dummyfile.txt")
-        context = {'filetext': servertext.text, 'clishadow': servertext.text}
+        #list of files in root dir (for now)
+        rootfilenames = project_files.list("")[0]
+        context = {'filetext': servertext.text, 'clishadow': servertext.text, 'files': rootfilenames}
 
         return render(request, 'web_ide/editor.html', context)
 

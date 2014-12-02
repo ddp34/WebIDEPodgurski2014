@@ -32,12 +32,21 @@ body {
 .leftpane, .rightpane {
 	  width: 20%;	
 	  height: 98%;
-	  outline: black solid thin;	  
 }
 
 .leftpane {
 	  float: left;
 	  background-color: #2CDB9B;
+	  border-radius: 5px;
+}
+
+.filelist {
+	  list-style-type: none;
+	  text-align: left;
+}
+
+.filenode {
+	  
 }
 
 .rightpane {
