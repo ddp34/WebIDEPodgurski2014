@@ -94,9 +94,4 @@ def restricted(request):
 def user_logout(request):
     return logout_then_login(request, 'login')
 
-#@login_required
-#def send(request):
-#def sync(request):
-#def receive(request):
-#def join(request):
-#def leave(request):
+
