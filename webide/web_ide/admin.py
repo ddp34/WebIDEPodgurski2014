@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from web_ide.models import Developer
 from web_ide.forms import CustomDeveloperChangeForm, CustomDeveloperCreationForm
-
+#from webide.models import *
 
 class DeveloperAdmin(admin.ModelAdmin):
     change_form = CustomDeveloperChangeForm
@@ -42,3 +42,4 @@ class AdministratorSite(AdminSite):
 # Register your models here.
 admin_site = AdministratorSite(name='myadmin')
 admin_site.register(Developer, DeveloperAdmin)
+#admin_site.register()

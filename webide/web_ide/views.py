@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login
+from models import  Room,Message
 
 #import text sync engine and dependencies
 from diffsync import DiffSync
@@ -39,7 +40,7 @@ def user_login(request):
 
 @login_required
 def editor(request):
-    
+
     #handle post requests
     if request.method == "POST":
 
@@ -62,7 +63,7 @@ def editor(request):
 
             #now that we have all the components, run the sync algorithm
             syncresults = diff_sync_engine.synchronizeDocs(request.POST['clienttext'], request.POST['clientshadow'], servertext.text, servershadow.text)
-            
+
             #save the resulting server text and shadow
             setattr(servertext, "text", syncresults[2])
             setattr(servershadow, "text", syncresults[3])
@@ -71,11 +72,11 @@ def editor(request):
 
             #return the client text and client shadow
             response_data = {}
-            response_data['clienttext'] = syncresults[0] 
-            response_data['clientshadow'] = syncresults[1] 
+            response_data['clienttext'] = syncresults[0]
+            response_data['clientshadow'] = syncresults[1]
 
             return HttpResponse(json.dumps(response_data), content_type="appliation/json")
-                
+
     else:
         #simple GET request
 
@@ -93,3 +94,9 @@ def restricted(request):
 def user_logout(request):
     return logout_then_login(request, 'login')
 
+#@login_required
+#def send(request):
+#def sync(request):
+#def receive(request):
+#def join(request):
+#def leave(request):
