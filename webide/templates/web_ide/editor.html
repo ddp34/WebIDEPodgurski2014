@@ -155,6 +155,8 @@ success: function(response) {
 //update client text and shadow
 $("#fileview").val(response.clienttext);
 window['shadow'] = response.clienttext;
+//set caret position to 0
+window['caretpos'] = 0;
 }
 
 });

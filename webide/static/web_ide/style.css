@@ -36,17 +36,34 @@ body {
 
 .leftpane {
 	  float: left;
-	  background-color: #16a085;
+	  background-color: #1abc9c;
 	  border-radius: 5px;
 }
 
 .filelist {
 	  list-style-type: none;
 	  text-align: left;
+	  padding-left: 0px;
+	  overflow: scroll;  
 }
 
 .filenode {
-	  
+	  padding: 5px;
+}
+
+a {
+	   padding: 5px;
+	   text-decoration: none;
+}
+
+a:visited {
+
+}
+
+a:hover {
+	  background-color: #16a085;
+	  padding: 5px;
+	  border-radius: 5px;
 }
 
 .rightpane {

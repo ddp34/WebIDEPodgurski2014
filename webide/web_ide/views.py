@@ -82,7 +82,7 @@ def editor(request):
         
         #open a different file
         if request.POST['posttype'] == "openfile":
-            print "open file " + request.POST['filename'] + " ..."
+
             try:
                 #retrieve server text and push it to user
                 servertext = ServerText.objects.get(filename=request.POST['filename'])
