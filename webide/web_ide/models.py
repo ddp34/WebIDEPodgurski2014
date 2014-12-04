@@ -8,8 +8,9 @@ from django.contrib.contenttypes import generic
 
 from django.core.validators import RegexValidator
 from datetime import datetime
-import os
 from django.core.files.storage import FileSystemStorage
+import os
+import shutil
 
 
 # This is to implement the Administrator functionality
@@ -69,6 +70,7 @@ class Developer(AbstractBaseUser, PermissionsMixin):
 #but with some changes, such as make_directory
 
 class ProjectFiles(FileSystemStorage):
+    location = os.path.join(os.path.abspath(os.path.abspath(os.path.dirname(__file__))), 'userfiles')
 
     #the save method throughout this class is inherited from FileSystemStorage
 
@@ -81,7 +83,7 @@ class ProjectFiles(FileSystemStorage):
         return self.save(name, f)
 
     #list all files and directories in a directory
-    #returns the directories, then the files
+    #returns the files, then the directories
     def list(self, path):
         contents = self.listdir(path)
         directories = contents[0]
@@ -155,9 +157,46 @@ class ProjectFiles(FileSystemStorage):
         self.delete_file(oldname)
         return new
 
+    def get_path(self):
+        return self.location
 
-#class Snapshot():
 
+class SnapshotManager():
+
+    def __init__(self):
+        self.location = os.path.join(os.path.dirname(os.path.abspath(os.path.abspath(os.path.dirname(__file__)))),
+                                     'snapshots')
+        try:
+            os.mkdir(self.location)
+        except OSError as e:
+            if e.errno == 17:
+                pass
+
+    def list_snaps(self):
+        return os.listdir(self.location)
+
+
+class Snapshot(ProjectFiles):
+
+    title = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+    dir = os.path.join(os.path.join(os.path.dirname(os.path.abspath(os.path.abspath(os.path.dirname(__file__)))),
+                       'snapshots/'), title)
+
+    def create_snap(self):
+        shutil.copytree(os.path.join(os.path.dirname(os.path.abspath(os.path.abspath(os.path.dirname(__file__)))),
+                                     'userfiles'), self.dir)
+
+    def rename(self, new):
+        self.title = new
+        new_dir = os.path.join(os.path.dirname(self.dir), new)
+        shutil.move(self.dir, new_dir)
+        self.dir = new_dir
+        return self.title
+
+    def revert(self, relative_path):
+        shutil.copyfile(os.path.join(self.dir, relative_path),
+                        os.path.join(os.path.join(os.path.dirname(os.path.dirname(self.dir)),
+                                                  'userfiles'), relative_path))
 
 
 #chat message db entry
