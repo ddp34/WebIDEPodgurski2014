@@ -117,5 +117,3 @@ def restricted(request):
 @login_required
 def user_logout(request):
     return logout_then_login(request, 'login')
-
-
