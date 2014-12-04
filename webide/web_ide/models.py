@@ -88,6 +88,37 @@ class ProjectFiles(FileSystemStorage):
         files = contents[1]
         return files, directories
 
+    #wrapper method for recursive directory listing
+    def list_r(self, path):
+        return self.list_recursive(path, [])
+
+    #lists all files and directories recursively in argument directory
+    #directory contents will be in nested lists
+    def list_recursive(self, path, fs_dict):
+
+        #DEBUG :D
+        print fs_dict
+
+        #get files, folders in root dir
+        cur_contents = self.list(path)
+        #append files to array
+        #fs_dict['files'].extend([path])
+        fs_dict['files'] += (cur_contents[0])
+
+        #recursively search subsequent folders
+        '''
+        if (len(cur_contents[1]) > 0):
+            #for each folder, append recursive results to array
+            for folder in cur_contents[1]:
+                print path + "/" + folder
+                if (path == ""):
+                    preceding_path = ""
+                else:
+                    preceding_path = path + "/"
+                fs_array.append(self.list_recursive(preceding_path + folder, fs_array))
+        '''
+        return fs_dict
+
     def open_file(self, name):
         if self.exists(name):
             return self.open(name, 'rb')
