@@ -197,6 +197,8 @@ function tree(data, path) {
 
 function sendCode() {
 var code = $(".filecontentsview").val();
+"Compiling...";
+$("#output").val("Compiling...");
 //ajax
 $.ajax({
 
@@ -208,6 +210,9 @@ success: function(response) {
 // display program output
 //alert(response);
 $("#output").val(response);
+},
+error: function() {
+$("#output").val("Network failure, try again.");
 }
 
 });
