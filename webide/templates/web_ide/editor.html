@@ -87,7 +87,8 @@ window.getSelection().addRange(range);
 //to the client.
 function pingServer() {
 
-//we need to keep the caret position
+//we need to keep & restore the caret position (if it was in focus)
+var editorInFocus = $(".filecontentsview").is(":focus");
 window['caretpos'] = $("#fileview")[0].selectionStart;
 
 //send POST request with ajax
@@ -100,9 +101,10 @@ type: "POST",
 success: function(response) {
 //update text in editor
 $("#fileview").val(response.clienttext);
-//restore the caret position
-//setCaret(1);
-setCaretToPos(document.getElementById("fileview"), window['caretpos']);
+//restore the caret position if it was in focus
+if(editorInFocus) {
+    setCaretToPos(document.getElementById("fileview"), window['caretpos']);
+}
 //update client shadow
 window['shadow'] = response.clientshadow;
 }
