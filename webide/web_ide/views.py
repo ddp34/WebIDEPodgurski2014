@@ -75,8 +75,9 @@ def editor(request):
             servershadow.save()
 
             msg_list = []
-            for txt in list(Msg.objects.values_list('text', flat=True)):
-                msg_list.extend([txt])
+            for txt in Msg.objects.values_list('text', flat=True):
+                author = Msg.objects.get(text=txt).name
+                msg_list.extend([author + ": " + txt])
 
 
             #return the client text and client shadow
@@ -127,8 +128,9 @@ def editor(request):
             newmsg.save()
 
             msg_list = []
-            for txt in list(Msg.objects.values_list('text', flat=True)):
-                msg_list.extend([txt])
+            for txt in Msg.objects.values_list('text', flat=True):
+                author = Msg.objects.get(text=txt).name
+                msg_list.extend([author + ": " + txt])
 
             response_data = {}
             response_data['messages'] = msg_list #list(Msg.objects.values_list('text', flat=True))
