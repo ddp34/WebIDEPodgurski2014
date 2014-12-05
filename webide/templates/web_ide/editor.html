@@ -4,7 +4,8 @@
       <div class="editorpane">
 
 	<div class="leftpane">
-	  <p>File Browser</p>
+	  <button type="button" onclick="sendCode()" style="float:center;">Run</button>
+          <button type="button" onclick="snapshot()" style="float:center;">Take Snapshot</button>
 	  <div class="filebrowserview">
 	  </div>
 	</div>
@@ -13,8 +14,6 @@
 
 	  <div class="filename">
 	    README.md
-          <button type="button" onclick="sendCode()" style="float:center;">Run</button>
-          <button type="button" onclick="snapshot()" style="float:center;">Take Snapshot</button>
 	  </div>
 	  <textarea id="fileview" class="filecontentsview" spellcheck="false">{{ filetext }}</textarea>
 	</div>
@@ -29,7 +28,7 @@
 	</div>
 
     <div class="bottompane">
-        <textarea id="output" class="outputview" spellcheck="false" >{{ outputtext }}</textarea>
+        <textarea id="output" class="outputview" spellcheck="false" readonly>{{ outputtext }}</textarea>
     </div>
 
       </div>
