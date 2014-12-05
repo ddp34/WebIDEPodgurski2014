@@ -117,6 +117,7 @@ def restricted(request):
 @login_required
 def user_logout(request):
     return logout_then_login(request, 'login')
+<<<<<<< HEAD
 
 def display_output(request):
     if request.POST['posttype'] == "sendcode":
@@ -127,3 +128,5 @@ def display_output(request):
     # returns a string containing success confirmation and output
     # or java error message
 
+=======
+>>>>>>> FETCH_HEAD
