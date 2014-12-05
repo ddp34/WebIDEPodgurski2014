@@ -12,9 +12,9 @@
 	<div class="centerpane">
 
 	  <div class="filename">
-          <button type="button" onclick="snapshot()" style="float:center;">Take Snapshot</button>
 	    README.md
           <button type="button" onclick="sendCode()" style="float:center;">Run</button>
+          <button type="button" onclick="snapshot()" style="float:center;">Take Snapshot</button>
 	  </div>
 	  <textarea id="fileview" class="filecontentsview" spellcheck="false">{{ filetext }}</textarea>
 	</div>
@@ -204,7 +204,8 @@ dataType: 'text',
 type: "POST",
 success: function(response) {
 // display program output
-$(".outputview").val(response.outputtext);
+//alert(response);
+$("#output").val(response);
 }
 
 });

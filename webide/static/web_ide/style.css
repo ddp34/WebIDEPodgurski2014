@@ -2,22 +2,24 @@ html * {
      font-family: arial;
 }
 
+
+
 html {
       height: 100%;
 }
 
 body {
-     height: 82%;
+     height: 80%;
 }
 
 .toplayer {
-	  background-color: #2CA3C7;
+	  background-color: white;
 }
 
 .container {
 	  height: 100%;
-	  margin: 6px;
-	  padding: 6px;
+	  margin: 3px;
+	  padding: 5px;
 	  background-color: white;
 	  border-radius: 5px;
 }
@@ -36,13 +38,14 @@ body {
 
 .leftpane {
 	  float: left;
-	  background-color: #1abc9c;
+	  background-color: #bdc3c7;
 	  border-radius: 5px;
 }
 
 .bottompane {
-      float: bottom;
-      background-color
+      width: 100%;
+      height: 11%;
+      background-color: white;
 }
 
 .filelist {
@@ -80,7 +83,7 @@ a:hover {
 
 .rightpane {
 	  float: right;
-	  background-color: #1abc9c;
+	  background-color: #bdc3c7;
 	  border-radius: 5px;
 }
 
@@ -108,7 +111,7 @@ a:hover {
 		  box-sizing: border-box;
 		  padding: 5px;
 		  text-align: left;
-		  font-family: "Courier New", Courier, monospace;
+		  font-family: Consolas, monospace;
 		  font-size: 12pt;
 		  tab-size: 4;
 		  background-color: #34495e;
@@ -126,23 +129,37 @@ a:hover {
 }
 
 .entrywindow {
-	     outline: black solid thin;
+         
 	     height: 25%;
-	     width: 100%;
+	     width: 98%;
 	     position: absolute;
 	     bottom: 0px;
 	     text-align: left;
 	     overflow: scroll;
-	     background-color: #FFFFFF;
+	     overflow-y: scroll;
+	     background-color: #34495e;
+	     color: white;
+	     border-radius: 0px 0px 5px 5px;
+	     box-sizing: border-box;
+	     padding: 2px;
+	     border: none;
 }
 
 .outputview {
         background-color: #34495e;
-        resize: none;
+        float: right;
         width: 100%;
+        height: 93%;
+        resize: none;
         overflow: scroll;
-        font-family: "Courier New", Courier, monospace;
+        overflow-y: auto;
+        font-family: Consolas, monospace;
 		font-size: 12pt;
-		color: #ecf0f1;
+		border-radius: 5px 5px 5px 5px;
+		outline: none;
+		border: none;
+		box-sizing: border-box;
+		color: white;
+		padding: 6px;
 
 }
