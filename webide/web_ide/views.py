@@ -8,7 +8,7 @@ from models import  Room,Message
 #import text sync engine and dependencies
 from diffsync import DiffSync
 from web_ide.models import *
-
+from compilertest import WebCompiler
 import json
 
 #keep a static DiffSync object to run synchronizations
@@ -16,7 +16,7 @@ diff_sync_engine = DiffSync()
 
 #filesystem controller
 project_files = ProjectFiles()
-
+compiler = WebCompiler()
 
 def user_login(request):
     if request.user.is_authenticated():
@@ -118,4 +118,12 @@ def restricted(request):
 def user_logout(request):
     return logout_then_login(request, 'login')
 
+def display_output(request):
+    if request.POST['posttype'] == "sendcode":
+        output = compiler.run_code(request.POST['src'])
+        response_data = {}
+        response_data['outputtext'] = output
+    # run_code from WebCompiler takes source code as a string and
+    # returns a string containing success confirmation and output
+    # or java error message
 

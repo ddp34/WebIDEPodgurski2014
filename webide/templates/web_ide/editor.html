@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block body_block %}
 
+
       <div class="editorpane">
 
 	<div class="leftpane">
@@ -15,8 +16,10 @@
 	</div>
 
 	<div class="centerpane">
+
 	  <div class="filename">
 	    README.md
+          <button type="button" onclick="sendCode()" style="float:center;">Run</button>
 	  </div>
 	  <textarea id="fileview" class="filecontentsview" spellcheck="false">{{ filetext }}</textarea>
 	</div>
@@ -34,7 +37,7 @@
 	</div>
 
     <div class="bottompane">
-	<p class="buildview" spellcheck="false" contentedittable="true">Future build site</p>
+        <textarea id="output" class="outputview" spellcheck="false" >{{ outputtext }}</textarea>
     </div>
 
       </div>
@@ -163,6 +166,25 @@ window['caretpos'] = 0;
 
 //restart sync
 beginSync();
+
+}
+
+function sendCode() {
+var code = $(".filecontentsview").val();
+//ajax
+$.ajax({
+
+url: '/web_ide/editor/',
+data: { posttype: 'sendcode', src: code, csrfmiddlewaretoken: '{{ csrf_token }}'},
+dataType: 'text',
+type: "POST",
+success: function(response) {
+// display program output
+$(".outputview").val(response.outputtext);
+}
+
+});
+} //end sendCode
 
 }
 
