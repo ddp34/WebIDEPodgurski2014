@@ -99,6 +99,15 @@ def editor(request):
             s = Snapshot()
             s.create_snap()
 
+        if request.POST['posttype'] == "sendcode":
+            src = request.POST['src']
+            sub = compiler.create_submission(src, language_name='Java')
+            time.sleep(5.0)
+            link = sub['link']
+            sub_det = compiler.submission_details(link)
+            output = sub_det['output']
+            return HttpResponse(repr(output))
+
     else:
         #initial GET request to editor page
 
