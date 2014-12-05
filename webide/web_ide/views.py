@@ -3,7 +3,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login
-from models import  Room,Message
 
 #import text sync engine and dependencies
 from diffsync import DiffSync
@@ -93,6 +92,10 @@ def editor(request):
             response_data = {}
             response_data['clienttext'] = servertext.text
             return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+        if request.POST['posttype'] == "snapshot":
+            s = Snapshot()
+            s.create_snap()
 
     else:
         #simple GET request

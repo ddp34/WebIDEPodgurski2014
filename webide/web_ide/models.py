@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractBaseUser
 from django.contrib.auth import hashers
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 from webide.settings import AUTH_USER_MODEL
 from django.contrib.contenttypes.models import ContentType, ContentTypeManager
 from django.contrib.contenttypes import generic
@@ -35,6 +36,17 @@ class DeveloperManager(BaseUserManager):
         administrator.is_staff = True
         administrator.save(using=self.db)
         return administrator
+
+    #adapted from http://stackoverflow.com/questions/2723052/how-to-get-the-list-of-the-authenticated-users
+    def get_all_logged_in_users(self):
+        sessions = Session.objects.filter(expire_date__gte=datetime.now())
+        uid_list = []
+
+        for session in sessions:
+            data = session.get_decoded()
+            uid_list.append(data.get('_auth_user_id', None))
+
+        return Developer.objects.filter(id__in=uid_list)
 
 
 class Developer(AbstractBaseUser, PermissionsMixin):
@@ -162,6 +174,7 @@ class ProjectFiles(FileSystemStorage):
 
 
 class SnapshotManager():
+    snaps = {}
 
     def __init__(self):
         self.location = os.path.join(os.path.dirname(os.path.abspath(os.path.abspath(os.path.dirname(__file__)))),

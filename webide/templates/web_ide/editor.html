@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block body_block %}
 
-
       <div class="editorpane">
 
 	<div class="leftpane">
@@ -18,6 +17,7 @@
 	<div class="centerpane">
 
 	  <div class="filename">
+          <button type="button" onclick="snapshot()" style="float:center;">Take Snapshot</button>
 	    README.md
           <button type="button" onclick="sendCode()" style="float:center;">Run</button>
 	  </div>
@@ -134,6 +134,18 @@ function sleep(milliseconds) {
       break;
     }
   }
+}
+
+
+function snapshot() {
+$.ajax({
+url: '/web_ide/editor/',
+data: {posttype: 'snapshot', csrfmiddlewaretoken: '{{ csrf_token }}'},
+dataType: 'json',
+type: "POST",
+success: function(response) {
+}
+});
 }
 
 //click function for filebrowser.
