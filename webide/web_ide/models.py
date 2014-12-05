@@ -196,6 +196,10 @@ class Snapshot(ProjectFiles):
                         os.path.join(os.path.join(os.path.dirname(os.path.dirname(self.dir)),
                                                   'userfiles'), relative_path))
 
+#quick attempt
+class Msg(models.Model):
+    name=models.CharField(max_length=32)
+    text=models.TextField()
 
 #chat message db entry
 class ChatMessage(models.Model):
