@@ -6,11 +6,6 @@
 	<div class="leftpane">
 	  <p>File Browser</p>
 	  <div class="filebrowserview">
-	    <ul class="filelist">
-	      {% for filename in files %}
-	      <li class="filenode"><a href="#" onclick="openFile('{{ filename }}')">{{ filename }}</a></li>
-	      {% endfor %}
-	    </ul>
 	  </div>
 	</div>
 
@@ -55,6 +50,8 @@ window['shadow'] = "{% filter escapejs %} {{ clishadow }} {% endfilter %}"
 
 //the caret position for this client, which we want to preserve
 window['caretpos'] = 0
+
+var fs = "{{ fs|escapejs }}";
 
 //functions
 
@@ -135,9 +132,9 @@ function sleep(milliseconds) {
 
 //click function for filebrowser.
 //opens the new file in code editor window
-function openFile(filename) {
+function openFile(data) {
 
-//alert(filename);
+var filename = data;
 
 stopSync();
 //wait for old server responses
@@ -166,7 +163,43 @@ beginSync();
 
 }
 
+function tree(data, path) {    
+    if (typeof(data) == 'object') {
+        var ul = $('<ul>');
+        var count = 0;
+        for (var i in data) {
+            count += 1;
+
+            ul.append($('<li>').append($('<a>').text(i).attr('href','#')/*.attr('onclick','openFile.call(this);')*/.attr('data', (path + i).replace('undefineduserfiles/','')))).append(tree(data[i], path + i + "/"));
+        }
+        if(count > 0) { return ul; }
+	else { return ''; }
+    } else {       
+        var textNode = document.createTextNode(' => ' + data);
+        return textNode;
+    }
+}
+
 //start synchronization immediately when document is ready
-$(document).ready(beginSync);
+$(document).ready(function() {
+
+//load filesystem from json
+var filesys = JSON.parse(fs);
+$(".filebrowserview").append($('<ul>').addClass('filelist').append(tree(filesys), ""));
+
+//hide list stuff
+$('li').click(function() {
+	    //if this is a folder
+	    if($(this).next().prop('tagName') == "UL") {
+	        //then collapse child views or whatever
+	        $(this).next().slideToggle();
+	    } else {
+	        //open file
+	        openFile($(this).children().first().attr('data'));
+	    }
+});
+
+beginSync();
+});
 </script>
 {% endblock %}

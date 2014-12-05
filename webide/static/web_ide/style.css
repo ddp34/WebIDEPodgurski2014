@@ -41,6 +41,7 @@ body {
 }
 
 .filelist {
+	  height: 96%;
 	  list-style-type: none;
 	  text-align: left;
 	  padding-left: 0px;
@@ -49,6 +50,12 @@ body {
 
 .filenode {
 	  padding: 5px;
+}
+
+ul {
+   list-style-type: none;
+   text-align: left;
+   padding-left: 16px;
 }
 
 a {
@@ -81,6 +88,10 @@ a:hover {
 	  width: 100%;
 	  border-radius: 5px 5px 0px 0px;
 	  background-color: #bdc3c7;
+}
+
+.filebrowserview {
+		 height: 83%;
 }
 
 .filecontentsview {

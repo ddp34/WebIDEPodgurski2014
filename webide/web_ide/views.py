@@ -9,6 +9,7 @@ from models import  Room,Message
 from diffsync import DiffSync
 from web_ide.models import *
 
+import os
 import json
 
 #keep a static DiffSync object to run synchronizations
@@ -95,7 +96,7 @@ def editor(request):
             return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     else:
-        #simple GET request
+        #initial GET request to editor page
 
         try:
             #retrieve server text and push it to user
@@ -104,9 +105,11 @@ def editor(request):
             #create buffer if it doesn't exist already
             servertext = ServerText(filename="README.md", text=project_files.open_file("README.md").read())
             servertext.save()
-        #list of files in root dir (for now)
-        rootfilenames = project_files.list("")[0]
-        context = {'filetext': servertext.text, 'clishadow': servertext.text, 'files': rootfilenames}
+
+        #generate directory structure
+        fs = json.dumps(project_files.list_r(os.getcwd() + "/webide/userfiles/"))
+
+        context = {'filetext': servertext.text, 'clishadow': servertext.text, 'fs': fs}
 
         return render(request, 'web_ide/editor.html', context)
 
