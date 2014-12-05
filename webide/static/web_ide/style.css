@@ -130,6 +130,7 @@ a:hover {
 
 .chatmessagedisplay {
 		    height: 80%;
+		    overflow: scroll;
 }
 
 .entrywindow {

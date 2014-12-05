@@ -23,7 +23,6 @@
 	  <p>Chat</p>
 	  <div class="chatview">
 	    <div class="chatmessagedisplay">
-	      Chat Messages will show up here.
 	    </div>
 	    <textarea class="entrywindow" placeholder="Enter message here!"></textarea>
 	  </div>
@@ -107,6 +106,7 @@ if(editorInFocus) {
 }
 //update client shadow
 window['shadow'] = response.clientshadow;
+$(".chatmessagedisplay").html(renderChat(response.chats));
 }
 })
 
@@ -213,6 +213,29 @@ $("#output").val(response);
 });
 } //end sendCode
 
+function sendChat(msg) {
+	  $.ajax({
+	      url: '/web_ide/editor/',
+	      data: {posttype: 'chatmsg', message: msg, csrfmiddlewaretoken: '{{ csrf_token }}'},
+	      dataType: 'json',
+	      type: "POST",
+	      success: function(response) {
+	          //in the future, refresh chat messages
+	          //alert(response.messages);
+	          $(".chatmessagedisplay").html(renderChat(response.messages));
+	          
+	      }
+	  });
+}
+
+function renderChat(msgs) {
+	  var ul = $('<ul>');
+	  for (var item in msgs) {
+	        ul.append($('<li>').text(msgs[item]));
+	    }
+	   return ul;
+}
+
 //start synchronization immediately when document is ready
 $(document).ready(function() {
 
@@ -229,6 +252,16 @@ $('li').click(function() {
 	    } else {
 	        //open file
 	        openFile($(this).children().first().attr('data'));
+	    }
+});
+
+//set chat entry listener
+$(".entrywindow").keypress(function(e) {
+	    if(e.keyCode == 13) {
+	        e.preventDefault();
+	        var msg = $(this).val();
+	        $(this).val('');
+	        sendChat(msg);
 	    }
 });
 

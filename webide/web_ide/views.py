@@ -74,10 +74,16 @@ def editor(request):
             servertext.save()
             servershadow.save()
 
+            msg_list = []
+            for txt in list(Msg.objects.values_list('text', flat=True)):
+                msg_list.extend([txt])
+
+
             #return the client text and client shadow
             response_data = {}
             response_data['clienttext'] = syncresults[0]
             response_data['clientshadow'] = syncresults[1]
+            response_data['chats'] = msg_list
 
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         
@@ -113,6 +119,21 @@ def editor(request):
                 output = sub_det['cmpinfo']
             return HttpResponse(repr(output))
 
+        if request.POST['posttype'] == "chatmsg":
+            #add to database
+
+            author = request.META['USER']
+            newmsg = Msg(name=author, text=request.POST['message'])
+            newmsg.save()
+
+            msg_list = []
+            for txt in list(Msg.objects.values_list('text', flat=True)):
+                msg_list.extend([txt])
+
+            response_data = {}
+            response_data['messages'] = msg_list #list(Msg.objects.values_list('text', flat=True))
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+
     else:
         #initial GET request to editor page
 
@@ -123,6 +144,11 @@ def editor(request):
             #create buffer if it doesn't exist already
             servertext = ServerText(filename="README.md", text=project_files.open_file("README.md").read())
             servertext.save()
+
+        #load chats
+        msg_list = []
+        for txt in list(Msg.objects.values_list('text', flat=True)):
+            msg_list.extend([txt])
 
         #generate directory structure
         fs = json.dumps(project_files.list_r(os.getcwd() + "/webide/userfiles/"))
