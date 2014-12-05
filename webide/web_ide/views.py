@@ -3,10 +3,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login
-from models import  Room,Message
 
 #import text sync engine and dependencies
 from diffsync import DiffSync
+from compilertest import WebCompiler
 from web_ide.models import *
 
 import os
@@ -17,7 +17,7 @@ diff_sync_engine = DiffSync()
 
 #filesystem controller
 project_files = ProjectFiles()
-
+compiler = WebCompiler()
 
 def user_login(request):
     if request.user.is_authenticated():
@@ -60,7 +60,7 @@ def editor(request):
                 servertext = ServerText(filename=request.POST['filename'], text="New file")
             #get server shadow, use the csrf token as a unique identifier
             try:
-                servershadow = ServerShadow.objects.get(name=request.POST['csrfmiddlewaretoken'])
+                servershadow = ServerShadow.objects.get(name=request.POST['csrfmiddlewaretoken'], filename=request.POST['filename'])
             except ServerShadow.DoesNotExist:
                 #if the user doesn't have a server shadow for this file, create one
                 servershadow = ServerShadow(filename=request.POST['filename'], text=request.POST['clienttext'], name=request.POST['csrfmiddlewaretoken'])
@@ -95,6 +95,10 @@ def editor(request):
             response_data['clienttext'] = servertext.text
             return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+        if request.POST['posttype'] == "snapshot":
+            s = Snapshot()
+            s.create_snap()
+
     else:
         #initial GET request to editor page
 
@@ -120,3 +124,12 @@ def restricted(request):
 @login_required
 def user_logout(request):
     return logout_then_login(request, 'login')
+
+def display_output(request):
+    if request.POST['posttype'] == "sendcode":
+        output = compiler.run_code(request.POST['src'])
+        response_data = {}
+        response_data['outputtext'] = output
+    # run_code from WebCompiler takes source code as a string and
+    # returns a string containing success confirmation and output
+    # or java error message

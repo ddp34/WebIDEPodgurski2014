@@ -10,8 +10,11 @@
 	</div>
 
 	<div class="centerpane">
+
 	  <div class="filename">
+          <button type="button" onclick="snapshot()" style="float:center;">Take Snapshot</button>
 	    README.md
+          <button type="button" onclick="sendCode()" style="float:center;">Run</button>
 	  </div>
 	  <textarea id="fileview" class="filecontentsview" spellcheck="false">{{ filetext }}</textarea>
 	</div>
@@ -29,7 +32,7 @@
 	</div>
 
     <div class="bottompane">
-	<p class="buildview" spellcheck="false" contentedittable="true">Future build site</p>
+        <textarea id="output" class="outputview" spellcheck="false" >{{ outputtext }}</textarea>
     </div>
 
       </div>
@@ -130,6 +133,18 @@ function sleep(milliseconds) {
   }
 }
 
+
+function snapshot() {
+$.ajax({
+url: '/web_ide/editor/',
+data: {posttype: 'snapshot', csrfmiddlewaretoken: '{{ csrf_token }}'},
+dataType: 'json',
+type: "POST",
+success: function(response) {
+}
+});
+}
+
 //click function for filebrowser.
 //opens the new file in code editor window
 function openFile(data) {
@@ -170,7 +185,7 @@ function tree(data, path) {
         for (var i in data) {
             count += 1;
 
-            ul.append($('<li>').append($('<a>').text(i).attr('href','#')/*.attr('onclick','openFile.call(this);')*/.attr('data', (path + i).replace('undefineduserfiles/','')))).append(tree(data[i], path + i + "/"));
+            ul.append($('<li>').append($('<a>').text(i).attr('href','#').attr('data', (path + i).replace('undefineduserfiles/','')))).append(tree(data[i], path + i + "/"));
         }
         if(count > 0) { return ul; }
 	else { return ''; }
@@ -179,6 +194,23 @@ function tree(data, path) {
         return textNode;
     }
 }
+
+function sendCode() {
+var code = $(".filecontentsview").val();
+//ajax
+$.ajax({
+
+url: '/web_ide/editor/',
+data: { posttype: 'sendcode', src: code, csrfmiddlewaretoken: '{{ csrf_token }}'},
+dataType: 'text',
+type: "POST",
+success: function(response) {
+// display program output
+$(".outputview").val(response.outputtext);
+}
+
+});
+} //end sendCode
 
 //start synchronization immediately when document is ready
 $(document).ready(function() {

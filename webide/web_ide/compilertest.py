@@ -8,14 +8,18 @@ class WebCompiler:
     password = "eecs393"
     i = Ideone(user, password)
 
+    def __init__(self):
+        pass
+
     def run_code(self, src):
         sub = self.submit_code(src)
         link = sub['link']
         sub_info = self.submission_info(link)
-        error = get_error(sub_info)
+        error = self.get_error(sub_info)
+        output = self.get_output(sub_info)
         if error != 'OK':
-            return error
-        else: return 'File successfully compiled ' + self.get_date(sub_info) + '\n' + self.get_output(sub_info)
+            return error + output
+        else: return output
 
 
     def test_response(self):
@@ -44,7 +48,7 @@ class WebCompiler:
         'status': 0,
         'stderr': "",
         'time': 0.02}'''
-        return i.submission_details(link)
+        return self.i.submission_details(link)
 
     def get_date(self, sub_info):
         return sub_info['date']

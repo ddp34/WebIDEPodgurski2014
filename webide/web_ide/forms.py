@@ -22,7 +22,7 @@ class CustomDeveloperCreationForm(forms.ModelForm):
         except Developer.DoesNotExist:
             return username
 
-        raise forms.ValidationError(_("Duplicate username"), code='invalid name')
+        raise forms.ValidationError("Duplicate username", code='invalid name')
 
 
     def clean_pw2(self):
@@ -30,10 +30,10 @@ class CustomDeveloperCreationForm(forms.ModelForm):
         pw2 = self.cleaned_data.get("pw2")
 
         if pw1 and pw2 and pw1 != pw2:
-            raise forms.ValidationError(_("Passwords must match."), code="pw mismatch")
+            raise forms.ValidationError("Passwords must match.", code="pw mismatch")
 
         if len(pw1) < 6:
-            raise forms.ValidationError(_("Password too short"), code="pw too short")
+            raise forms.ValidationError("Password too short", code="pw too short")
 
         return pw2
 
