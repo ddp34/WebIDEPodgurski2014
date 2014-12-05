@@ -6,9 +6,9 @@ from django.contrib.auth.views import logout_then_login
 
 #import text sync engine and dependencies
 from diffsync import DiffSync
-from compilertest import WebCompiler
+from ideone import Ideone
 from web_ide.models import *
-
+import time
 import os
 import json
 
@@ -17,7 +17,7 @@ diff_sync_engine = DiffSync()
 
 #filesystem controller
 project_files = ProjectFiles()
-compiler = WebCompiler()
+compiler = Ideone('lne1', 'eecs393')
 
 def user_login(request):
     if request.user.is_authenticated():
@@ -102,10 +102,15 @@ def editor(request):
         if request.POST['posttype'] == "sendcode":
             src = request.POST['src']
             sub = compiler.create_submission(src, language_name='Java')
-            time.sleep(5.0)
+            #time.sleep(5.0)
             link = sub['link']
             sub_det = compiler.submission_details(link)
-            output = sub_det['output']
+            while sub_det['status'] != 0:
+                sub_det = compiler.submission_details(link)
+            if sub_det['output']:
+                output = sub_det['output']
+            else:
+                output = sub_det['cmpinfo']
             return HttpResponse(repr(output))
 
     else:
