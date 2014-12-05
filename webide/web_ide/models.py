@@ -3,7 +3,7 @@ from django.contrib.auth.models import BaseUserManager, PermissionsMixin, Abstra
 from django.contrib.auth import hashers
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
-from webide.settings import AUTH_USER_MODEL
+#from webide.settings import AUTH_USER_MODEL
 from django.contrib.contenttypes.models import ContentType, ContentTypeManager
 from django.contrib.contenttypes import generic
 
@@ -212,24 +212,24 @@ class ChatMessage(models.Model):
     def getAuthor(self):
         return self.author
 
-class RoomManager(models.Manager):
+class LoggedUser(models.Model):
+    user = models.ForeignKey(User, primary_key=True)
 
-    def create(self, object):
-        #Creates a new chat room and registers it to the calling object'''
-        r = self.model(content_object=object)
-        r.save()
-        return r
+    def __unicode__(self):
+        return self.user.username
 
-    def get_for_object(self, object):
-        #Try to get a room related to the object passed.
-        return self.get(content_type=ContentType.objects.get_for_model(object), object_id=object.pk)
+    def login_user(sender, request, user, **kwargs):
+        LoggedUser(user=user).save()
 
-    def get_or_create(self, object):
-        #Save us from the hassle of validating the return value of get_for_object and create a room if none exists
+    def logout_user(sender, request, user, **kwargs):
         try:
-            return self.get_for_object(object)
-        except Room.DoesNotExist:
-            return self.create(object)
+            u = LoggedUser.objects.get(user=user)
+            u.delete()
+        except LoggedUser.DoesNotExist:
+            pass
+
+    #user_logged_in.connect(login_user)
+    #user_logged_out.connect(logout_user)
 
 class Room(models.Model):
     #Representation of a generic chat room'''
@@ -238,7 +238,7 @@ class Room(models.Model):
     content_object = generic.GenericForeignKey('content_type','object_id') # use both up, USE THIS WHEN INSTANCING THE MODEL
     created = models.DateTimeField(default=datetime.now())
     comment = models.TextField(blank=True, null=True)
-    objects = RoomManager() # custom manager
+    #objects = RoomManager() # custom manager
 
     def __add_message(self, type, sender, message=None):
         #Generic function for adding a message to the chat room'''
@@ -296,7 +296,7 @@ class Message(models.Model):
     #A message that belongs to a chat room'''
     room = models.ForeignKey(Room)
     type = models.CharField(max_length=1, choices=MESSAGE_TYPE_CHOICES)
-    author = models.ForeignKey(AUTH_USER_MODEL, related_name='author', blank=True, null=True)
+    author = models.ForeignKey(User, related_name='author', blank=True, null=True)
     message = models.CharField(max_length=255, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now=True)
 
