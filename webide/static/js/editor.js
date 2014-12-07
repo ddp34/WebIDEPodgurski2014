@@ -49,4 +49,11 @@ $(document).ready(function() {
 		    $(".filecontentsview").focus();
 		}
 	    });
+
+
+	$('#button').click(function(){
+		var toAdd = $('.entrywindow').val();
+		$('.chatmessagedisplay').append('<div class = "item"> + toAdd + '</div>);
+
+	});
 });
