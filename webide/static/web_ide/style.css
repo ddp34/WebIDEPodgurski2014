@@ -167,3 +167,18 @@ a:hover {
 		padding: 6px;
 
 }
+
+#button{
+	text-align: right;
+	display: inline-block;
+	height:20px;
+	width:70px;
+	background-color:green;
+	font-family:arial;
+	font-weight:bold;
+	color:#ffffff;
+	border-radius:5px;
+	text-align:center;
+	margin-top:2px;
+
+}
