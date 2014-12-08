@@ -123,7 +123,7 @@ def editor(request):
         if request.POST['posttype'] == "chatmsg":
             #add to database
 
-            author = request.META['USER']
+            author = request.user.username
             newmsg = Msg(name=author, text=request.POST['message'])
             newmsg.save()
 
