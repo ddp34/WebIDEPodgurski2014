@@ -1,6 +1,7 @@
 from django.test import TestCase
 from web_ide.models import *
 from web_ide.forms import CustomDeveloperCreationForm
+import os
 
 from diffsync import DiffSync
 
@@ -114,10 +115,15 @@ class ProjectFilesTestCase(TestCase):
     def test_file_deletion(self):
         fs = ProjectFiles()
         fs.delete_file('test')
-        self.assertNotIn('test', fs.list(''))
+        self.assertNotIn(u'test', fs.list(''))
 
     def test_make_directory(self):
         fs = ProjectFiles()
         fs.make_directory('', 'testname')
         self.assertIn(u'testname', fs.list('')[1])
+
+    def test_rename_file(self):
+        fs = ProjectFiles()
+        fs.rename_file('test_new', 'test')
+        self.assertIn(u'test_new', fs.list('')[0])
 
