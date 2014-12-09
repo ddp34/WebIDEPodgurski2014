@@ -6,3 +6,5 @@ webide/templates/editortest.html
 webide/web_ide/syntax/parsetab.py
 
 webide/web_ide/syntax/parser.out
+
+webide/web_ide/migrations/0003_auto_20141209_0021.py

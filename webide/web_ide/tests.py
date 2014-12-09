@@ -4,6 +4,8 @@ from web_ide.forms import CustomDeveloperCreationForm
 import os
 
 from diffsync import DiffSync
+from django.http import HttpRequest
+from views import editor
 
 '''
 #test regexes for user credentials
@@ -127,3 +129,21 @@ class ProjectFilesTestCase(TestCase):
         fs.rename_file('test_new', 'test')
         self.assertIn(u'test_new', fs.list('')[0])
 
+class OutputTestCase(TestCase):
+    #testing issue 18 on the github issues pag
+    #the compiler shouldn't return an empty string or null
+    #this was the result of saving the output variable before compile was finished
+    def test_wait_for_compile(self): # this is basically
+        request = HttpRequest()
+        request.POST['posttype'] = 'sendcode'
+        request.POST['src'] = 'dummy'
+        response = editor(request) # the response is just a string
+        self.assertFalse(response, "")
+
+    def test_hell_world(self): # verify correct output of the hell world program
+        src = 'class HellWorld{public static void main (String[] args) {System.out.print("Hell world!");}}'
+        request = HttpRequest()
+        request.POST['posttype'] = 'sendcode'
+        request.POST['src'] = src
+        response = editor(request)
+        self.assertEqual(response, "Hell world!")
