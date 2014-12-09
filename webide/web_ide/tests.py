@@ -42,4 +42,39 @@ class DeveloperTestCase(TestCase):
         self.assertEqual(user.get_full_name(), "testusername")
         self.assertEqual(user.get_short_name(), "testusername")
 
+#class SyntaxTestCase(TestCase):
+
+    #def test_token_mapping(self):
+        #he = HighlightingEngine()
+        #hard_mapping = he.color_table["INT"]
+
+        #test_tok = LexToken('INT', 'int', 1, 1)
+        #test_mapping = he.highlight_element(test_tok)
+
+        #self.assertEqual(hard_mapping, test_mapping)
 '''
+
+
+class ProjectFilesTestCase(TestCase):
+
+    def test_file_creation(self):
+        name = 'test name'
+        fs = ProjectFiles()
+        fs.create_file(name)
+        self.assertIn(u'test name', fs.list('')[0])
+
+    def test_file_open(self):
+        fs = ProjectFiles()
+        fs.create_file('test')
+        file_open_is_valid = fs.open_file('test')
+        self.assertIsNotNone(file_open_is_valid)
+
+    def test_file_deletion(self):
+        fs = ProjectFiles()
+        fs.delete_file('test')
+        self.assertNotIn('test', fs.list(''))
+
+    def test_make_directory(self):
+        fs = ProjectFiles()
+        fs.make_directory('', 'testname')
+        self.assertIn(u'testname', fs.list('')[1])
