@@ -89,13 +89,32 @@ class DiffSyncTestCase(TestCase):
         #grab objects
         servertext = ServerText.objects.get(filename="test.txt")
 
-        #suppose user a syncs their work, and then user b
-        sync_results_1 = diff_sync.synchronizeDocs(a_clienttext, a_clientshadow, a_servershadow.text, servertext.text)
+        #suppose user a syncs their edits over to the server
+        sync_results_1 = diff_sync.synchronizeDocs(a_clienttext, a_clientshadow, servertext.text, a_servershadow.text)
 
-        #check that the resulting client text and shadow for a are valid
+        #check that the resulting values are synchronized
         self.assertEqual(sync_results_1[0], "The quick red fox jumps over the lazy dog.")
+        self.assertEqual(sync_results_1[1], "The quick red fox jumps over the lazy dog.")
+        self.assertEqual(sync_results_1[2], "The quick red fox jumps over the lazy dog.")
+        self.assertEqual(sync_results_1[3], "The quick red fox jumps over the lazy dog.")
 
-        self.assertEqual("", "")
+        #save changes
+        a_clienttext = sync_results_1[0]
+        a_clientshadow = sync_results_1[1]
+
+        setattr(servertext, 'text', sync_results_1[2])
+        servertext.save()
+        setattr(a_servershadow, 'text', sync_results_1[3])
+        a_servershadow.save()
+
+        #user b sends its updates to the server, and also receives a's edits from the server
+        sync_results_2 = diff_sync.synchronizeDocs(b_clienttext, b_clientshadow, servertext.text, b_servershadow.text)
+        
+        #check that the resulting values are synchronized (both edits should be combined)
+        self.assertEqual(sync_results_2[0], "The quick red fox jumps above the lazy dog.")
+        self.assertEqual(sync_results_2[1], "The quick red fox jumps above the lazy dog.")
+        self.assertEqual(sync_results_2[2], "The quick red fox jumps above the lazy dog.")
+        self.assertEqual(sync_results_2[3], "The quick red fox jumps above the lazy dog.")
 
 class ProjectFilesTestCase(TestCase):
 
