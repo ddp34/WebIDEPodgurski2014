@@ -131,7 +131,10 @@ class ProjectFilesTestCase(TestCase):
     def test_write_string_file(self):
         fs = ProjectFiles()
         write_string_to_file_is_valid = fs.write_string_to_file('test_new', 'hello')
-        self.assertIsNotNone(write_string_to_file_is_valid)class OutputTestCase(TestCase):
+        self.assertIsNotNone(write_string_to_file_is_valid)
+
+
+class OutputTestCase(TestCase):
     #testing issue 18 on the github issues pag
     #the compiler shouldn't return an empty string or null
     #this was the result of saving the output variable before compile was finished
@@ -150,9 +153,10 @@ class ProjectFilesTestCase(TestCase):
         response = editor(request)
         self.assertEqual(response, "Hell world!")
 
+
 class SnapShotTestCase(TestCase):
 
     def test_rename(self):
-        ss = Snapshot(ProjectFiles())
+        ss = Snapshot()
         ss.rename("newname")
         self.assertEqual("newname", ss.title)
