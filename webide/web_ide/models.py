@@ -160,6 +160,7 @@ class ProjectFiles(FileSystemStorage):
 
 class SnapshotManager():
     snaps = {}
+    logged_in = 0
 
     def __init__(self):
         self.location = os.path.join(os.path.dirname(os.path.abspath(os.path.abspath(os.path.dirname(__file__)))),
@@ -172,6 +173,16 @@ class SnapshotManager():
 
     def list_snaps(self):
         return os.listdir(self.location)
+
+    def add_logged_in(self):
+        self.logged_in += 1
+
+    def remove_logged_in(self):
+        self.logged_in -= 1
+
+    def auto_snapshot(self):
+        while self.logged_in > 0:
+            pass
 
 
 class Snapshot(ProjectFiles):
@@ -202,7 +213,7 @@ class Msg(models.Model):
     text=models.TextField()
 
 #chat message db entry
-class ChatMessage(models.Model):
+'''class ChatMessage(models.Model):
     message = models.TextField()
     author = models.CharField(max_length = 20)
 
@@ -215,7 +226,7 @@ class ChatMessage(models.Model):
 class RoomManager(models.Manager):
 
     def create(self, object):
-        #Creates a new chat room and registers it to the calling object'''
+        #Creates a new chat room and registers it to the calling object
         r = self.model(content_object=object)
         r.save()
         return r
@@ -232,7 +243,7 @@ class RoomManager(models.Manager):
             return self.create(object)
 
 class Room(models.Model):
-    #Representation of a generic chat room'''
+    #Representation of a generic chat room
     content_type = models.ForeignKey(ContentType, blank=True, null=True) # to what kind of object is this related
     object_id = models.PositiveIntegerField(blank=True, null=True) # to which instace of the aforementioned object is this related
     content_object = generic.GenericForeignKey('content_type','object_id') # use both up, USE THIS WHEN INSTANCING THE MODEL
@@ -241,25 +252,25 @@ class Room(models.Model):
     objects = RoomManager() # custom manager
 
     def __add_message(self, type, sender, message=None):
-        #Generic function for adding a message to the chat room'''
+        #Generic function for adding a message to the chat room
         m = Message(room=self, type=type, author=sender, message=message)
         m.save()
         return m
 
     def say(self, sender, message):
-        #Say something in to the chat room'''
+        #Say something in to the chat room
         return self.__add_message('m', sender, message)
 
     def join(self, user):
-        #A user has joined'''
+        #A user has joined
         return self.__add_message('j', user)
 
     def leave(self, user):
-        #A user has leaved'''
+        #A user has leaved
         return self.__add_message('l', user)
 
     def messages(self, after_pk=None, after_date=None):
-        #List messages, after the given id or date'''
+        #List messages, after the given id or date
         m = Message.objects.filter(room=self)
         if after_pk:
             m = m.filter(pk__gt=after_pk)
@@ -268,7 +279,7 @@ class Room(models.Model):
         return m.order_by('pk')
 
     def last_message_id(self):
-        #Return last message sent to room'''
+        #Return last message sent to room
         m = Message.objects.filter(room=self).order_by('-pk')
         if m:
             return m[0].id
@@ -293,7 +304,7 @@ MESSAGE_TYPE_CHOICES = (
 
 
 class Message(models.Model):
-    #A message that belongs to a chat room'''
+    #A message that belongs to a chat room
     room = models.ForeignKey(Room)
     type = models.CharField(max_length=1, choices=MESSAGE_TYPE_CHOICES)
     author = models.ForeignKey(AUTH_USER_MODEL, related_name='author', blank=True, null=True)
@@ -314,7 +325,7 @@ class Message(models.Model):
         elif self.type == 'a':
             return 'ACTION: %s > %s' % (self.author, self.message)
         return self.message
-
+'''
 
 class Build(models.Model):
     buildname = models.CharField(max_length=64)

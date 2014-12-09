@@ -3,6 +3,8 @@ from web_ide.models import *
 from web_ide.forms import CustomDeveloperCreationForm
 
 from diffsync import DiffSync
+from django.http import HttpRequest
+from views import editor
 
 '''
 #test regexes for user credentials
@@ -133,10 +135,47 @@ class ProjectFilesTestCase(TestCase):
     def test_file_deletion(self):
         fs = ProjectFiles()
         fs.delete_file('test')
-        self.assertNotIn('test', fs.list(''))
+        self.assertNotIn(u'test', fs.list(''))
 
     def test_make_directory(self):
         fs = ProjectFiles()
         fs.make_directory('', 'testname')
         self.assertIn(u'testname', fs.list('')[1])
 
+    def test_rename_file(self):
+        fs = ProjectFiles()
+        fs.rename_file('test_new', 'test')
+        self.assertIn(u'test_new', fs.list('')[0])
+
+    def test_write_string_file(self):
+        fs = ProjectFiles()
+        write_string_to_file_is_valid = fs.write_string_to_file('test_new', 'hello')
+        self.assertIsNotNone(write_string_to_file_is_valid)
+
+
+class OutputTestCase(TestCase):
+    #testing issue 18 on the github issues pag
+    #the compiler shouldn't return an empty string or null
+    #this was the result of saving the output variable before compile was finished
+    def test_wait_for_compile(self): # this is basically
+        request = HttpRequest()
+        request.POST['posttype'] = 'sendcode'
+        request.POST['src'] = 'dummy'
+        response = editor(request) # the response is just a string
+        self.assertFalse(response, "")
+
+    def test_hell_world(self): # verify correct output of the hell world program
+        src = 'class HellWorld{public static void main (String[] args) {System.out.print("Hell world!");}}'
+        request = HttpRequest()
+        request.POST['posttype'] = 'sendcode'
+        request.POST['src'] = src
+        response = editor(request)
+        self.assertEqual(response, "Hell world!")
+
+
+class SnapShotTestCase(TestCase):
+
+    def test_rename(self):
+        ss = Snapshot()
+        ss.rename("newname")
+        self.assertEqual("newname", ss.title)
