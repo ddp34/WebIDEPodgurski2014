@@ -1,7 +1,6 @@
 from django.test import TestCase
 from web_ide.models import *
 from web_ide.forms import CustomDeveloperCreationForm
-import os
 
 from diffsync import DiffSync
 from django.http import HttpRequest
@@ -129,7 +128,10 @@ class ProjectFilesTestCase(TestCase):
         fs.rename_file('test_new', 'test')
         self.assertIn(u'test_new', fs.list('')[0])
 
-class OutputTestCase(TestCase):
+    def test_write_string_file(self):
+        fs = ProjectFiles()
+        write_string_to_file_is_valid = fs.write_string_to_file('test_new', 'hello')
+        self.assertIsNotNone(write_string_to_file_is_valid)class OutputTestCase(TestCase):
     #testing issue 18 on the github issues pag
     #the compiler shouldn't return an empty string or null
     #this was the result of saving the output variable before compile was finished
