@@ -147,3 +147,10 @@ class OutputTestCase(TestCase):
         request.POST['src'] = src
         response = editor(request)
         self.assertEqual(response, "Hell world!")
+
+class SnapShotTestCase(TestCase):
+
+    def test_rename(self):
+        ss = Snapshot(ProjectFiles())
+        ss.rename("newname")
+        self.assertEqual("newname", ss.title)
